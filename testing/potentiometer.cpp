@@ -1,62 +1,29 @@
-#include <pigpio.h>
 #include <iostream>
+#include <pigpio.h>
 
-#define SPI_CLK  11 // BCM 11 (SCLK)
-#define SPI_MOSI 10 // BCM 10 (MOSI)
-#define SPI_MISO  9  // BCM 9  (MISO)
-#define SPI_CS   8  // BCM 8  (CE0)
-int LOW = 0;
-int HIGH = 1;
-
-#define CHANNEL 0 // Channel connected to potentiometer (can be 0-7)
+using namespace std;
 
 int main() {
-  // Initialize pigpio library
+  // Initialize pigpio library (needs to be run with sudo)
   if (gpioInitialise() < 0) {
-    std::cerr << "pigpio initialization failed!" << std::endl;
+    cerr << "Error initializing pigpio library: " << gpioErrorStr() << endl;
     return 1;
   }
 
-  // Set SPI pins as outputs (except MISO)
-  gpioSetMode(SPI_CLK, PI_OUTPUT);
-  gpioSetMode(SPI_MOSI, PI_OUTPUT);
-  gpioSetMode(SPI_CS, PI_OUTPUT);
+  // Set BCM 14 as input pin
+  gpioSetMode(14, PI_INPUT);
 
-  while (true) {
-    // Set chip select low to start communication
-    gpioWrite(SPI_CS, LOW);
+  // Read the current state of the LED (0 - off, 1 - on)
+  int level = gpioRead(14);
 
-    // Create a buffer for data transmission (MCP3008 sends 12 bits + null bits)
-    uint16_t data = 0x03 << 11; // Start bit, single ended mode, channel select
-
-    // Send first 8 bits (MSB) with clock pulses
-    for (int i = 0; i < 8; i++) {
-      gpioWrite(SPI_CLK, LOW);
-      gpioWrite(SPI_MOSI, data & 0x80);
-      data <<= 1;
-      gpioWrite(SPI_CLK, HIGH);
-    }
-
-    // Read 12 bits (data + null bits) with clock pulses (MSB first)
-    uint16_t adc_value = 0;
-    for (int i = 0; i < 12; i++) {
-      gpioWrite(SPI_CLK, LOW);
-      adc_value <<= 1;
-      adc_value |= gpioRead(SPI_MISO);
-      gpioWrite(SPI_CLK, HIGH);
-    }
-
-    // Set chip select high to end communication
-    gpioWrite(SPI_CS, HIGH);
-
-    // Print the ADC value (0 to 4095 for a 12-bit ADC)
-    std::cout << "ADC Value: " << adc_value << std::endl;
-
-    // Delay between readings (optional)
-    gpioDelay(1000000); // Delay in microseconds
+  // Print the state of the LED
+  if (level == 0) {
+    cout << "LED is OFF" << endl;
+  } else {
+    cout << "LED is ON" << endl;
   }
 
-  // Terminate pigpio library (optional)
+  // Clean up pigpio library
   gpioTerminate();
 
   return 0;
