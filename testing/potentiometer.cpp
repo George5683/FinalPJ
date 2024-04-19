@@ -6,7 +6,7 @@ using namespace std;
 int main() {
   // Initialize pigpio library (needs to be run with sudo)
   if (gpioInitialise() < 0) {
-    cerr << "Error initializing pigpio library: " << gpioErrorStr() << endl;
+    std::cerr << "pigpio initialization failed!" << std::endl;
     return 1;
   }
 
