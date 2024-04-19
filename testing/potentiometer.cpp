@@ -5,6 +5,8 @@
 #define SPI_MOSI 10 // BCM 10 (MOSI)
 #define SPI_MISO  9  // BCM 9  (MISO)
 #define SPI_CS   8  // BCM 8  (CE0)
+int LOW = 0;
+int HIGH = 1;
 
 #define CHANNEL 0 // Channel connected to potentiometer (can be 0-7)
 
