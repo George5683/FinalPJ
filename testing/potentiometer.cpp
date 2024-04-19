@@ -11,10 +11,12 @@ int main() {
   }
 
   // Set BCM 14 as input pin
-  gpioSetMode(14, PI_INPUT);
+  gpioSetMode(4, PI_INPUT);
 
   // Read the current state of the LED (0 - off, 1 - on)
-  int level = gpioRead(14);
+  int level = gpioRead(4);
+
+  cout << "Reading is: " << level << endl;
 
   // Print the state of the LED
   if (level == 0) {
