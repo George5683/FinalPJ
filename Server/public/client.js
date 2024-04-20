@@ -26,8 +26,10 @@ let tab4Header = document.getElementById('tab-4-btn');
 let tab5Header = document.getElementById('tab-5-btn');
 let tab6Header = document.getElementById('tab-6-btn');
 
-let getthings = document.getElementById('get-things');
+let getThings = document.getElementById('get-things');
 let getServices = document.getElementById('get-services');
+let getRelationships = document.getElementById('get-relationships');
+
 // Below are functions
 
 tab1Next.onclick = function() {
@@ -93,15 +95,22 @@ tab6Previous.onclick = function() {
     tab5.style.display = 'block';
 }
 
-getthings.onclick = function() {
-
-}
-getServices.onclick = async function () {
+getThings.onclick = async function () {
     const currentService = await fetchData('/Services');
     const serviceBox = document.getElementById('service-results');
     serviceBox.innerText = currentService;
 }
 
+getServices.onclick = async function () {
+    const currentService = await fetchData('/Things');
+    const serviceBox = document.getElementById('thing-results');
+    serviceBox.innerText = currentService;
+}
+getRelationships.onclick = async function () {
+    const currentService = await fetchData('/Relationships');
+    const serviceBox = document.getElementById('relationship-results');
+    serviceBox.innerText = currentService;
+}
 
 
 
