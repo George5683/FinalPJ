@@ -12,7 +12,7 @@ int main() {
 
   // Set BCM 14 as input pin
   gpioSetMode(17, PI_INPUT);
-
+while(true){
   // Read the current state of the LED (0 - off, 1 - on)
   int level = gpioRead(17);
 
@@ -24,6 +24,9 @@ int main() {
   } else {
     cout << "LED is ON" << endl;
   }
+  gpioDelay(500000); // Delay for 500 milliseconds
+
+}
 
   // Clean up pigpio library
   gpioTerminate();
