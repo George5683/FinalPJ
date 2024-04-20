@@ -206,6 +206,9 @@ server.bind(MULTIPORT, function(){
 
 server.on('message', function (message,remote){
   console.log('MCast Msg: From: ' + remote.address + ':' + remote.port +' - ' + message);
+  var JsonRaw = message.toJSON()
+
+
 })
 
 function broadcastNew() {
