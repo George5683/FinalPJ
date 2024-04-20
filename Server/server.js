@@ -3,6 +3,8 @@ const net = require('net');
 const path = require('path');
 const bodyParser = require('body-parser');
 const dgram = require('dgram');
+const fs = require('fs');
+const readline = require('node:readline')
 
 const app = express();
 const port = 8000;
@@ -14,6 +16,13 @@ let jsonObject;
 
 let searchData;
 let multicastSocket;
+
+// Line reader
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
 
 // Define multicast IP and port as variables (you can change these)
 const MCIp = '224.0.0.1'; // Replace with actual multicast group address
@@ -41,10 +50,10 @@ function startMulticastListening(multicastIp, multicastPort) {
     }
   });
 
-  // Join the multicast group
-  multicastSocket.joinMulticast(multicastIp, () => {
-    console.log(`Listening for multicast on ${multicastIp}:${multicastPort}`);
-  });
+   //Join the multicast group
+ // multicastSocket.joinMulticast(multicastIp, () => {
+ //   console.log(`Listening for multicast on ${multicastIp}:${multicastPort}`);
+  //});
 
   multicastSocket.on('error', (err) => {
     console.error('Socket error:', err);
@@ -148,11 +157,86 @@ app.put('/unicast', (req, res) => {
   }
 });
 
+function createFile(name){
+  try{
+    content = "temp stuff"
+    pathSaves = __dirname + '/public/Saves/';
+    fs.writeFile(pathSaves + name + ".txt", content, error => {
+      if(error){
+        console.error(error);
+      }
+      else{
+        //write
+      }
+    });
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
+
+function readFile(FileName) {
+  pathSaves = __dirname + '/public/Saves/';
+
+  fs.readFile(pathSaves + "/" + FileName + ".txt", 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(data);
+  });
+
+}
+
+
+
+
+
+//Get Saved Files
+app.get(`/Saves`, (req, res,) => {
+  SaveList = "Files to read";
+
+
+  res.json(SaveList);
+})
+//Create Saved Files
+app.put(`/Saves`,(req, res,) => {
+  SaveList = "Files to Save";
+
+
+  res.status(100);
+})
+
+
+
 // Handle any unmatched routes and serve index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(staticPath, 'index.html'));
 });
 
+
+
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
+
+
+  rl.question(`What do you want to do? Make or Read`, option => {
+    if(option === 'Make' || option === 'make'){
+      rl.question(`Enter a file name`, name => {
+        console.log(`Making ${name}`);
+        createFile(name);
+        rl.close();
+      });
+    }
+    else if(option === 'Read' || option === 'read') {
+      rl.question(`Enter a file name`, name => {
+        console.log(`Reading ${name}`);
+        readFile(name);
+        rl.close();
+      });
+    }
+  });
+
+
 });
