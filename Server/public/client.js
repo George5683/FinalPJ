@@ -1,137 +1,98 @@
-// For the search socket button 
-var socket = null;
 
-document.getElementById('unicastcall').addEventListener('click', async () => {
+// Below are variables
+let tab1Next = document.getElementById('tab1-next');
+let tab2Next = document.getElementById('tab2-next');
+let tab3Next = document.getElementById('tab3-next');
+let tab4Next = document.getElementById('tab4-next');
+let tab5Next = document.getElementById('tab5-next');
 
-  console.log("Service Call Button Pressed");
+let tab2Previous = document.getElementById('tab2-previous');
+let tab3Previous = document.getElementById('tab3-previous');
+let tab4Previous = document.getElementById('tab4-previous');
+let tab5Previous = document.getElementById('tab5-previous');
+let tab6Previous = document.getElementById('tab6-previous');
 
-  // LED or TEMP
-  let Service = document.getElementById('service').value;
-  let ServiceName = document.getElementById('serviceName').value;
-  let thingId = document.getElementById('thingID').value;
-  let ServiceIp = document.getElementById('ServiceIp').value;
-  let Input = document.getElementById('ServiceInput').value;
+let tab1 = document.getElementById('tab-1-section');
+let tab2 = document.getElementById('tab-2-section');
+let tab3 = document.getElementById('tab-3-section');
+let tab4 = document.getElementById('tab-4-section');
+let tab5 = document.getElementById('tab-5-section');
+let tab6 = document.getElementById('tab-6-section');
 
-  const data = {
-    thingId: thingId,
-    ServiceName: ServiceName,
-    ServiceIp: ServiceIp,
-    Input : Input
-  };
+let tab1Header = document.getElementById('tab-1-btn');
+let tab2Header = document.getElementById('tab-2-btn');
+let tab3Header = document.getElementById('tab-3-btn');
+let tab4Header = document.getElementById('tab-4-btn');
+let tab5Header = document.getElementById('tab-5-btn');
+let tab6Header = document.getElementById('tab-6-btn');
 
-  try {
-    const response = await fetch('/unicast', {
-      method: 'PUT', // Use PUT method
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
+let getthings = document.getElementById('get-things');
 
-    if (response.ok) {
-      const responseData = await response.text(); // Get response as text (for Buffer handling)
-      let jsonObject;
-      try {
-        jsonObject = JSON.parse(responseData); // Attempt to parse JSON
-      } catch (error) {
-        console.error('Error parsing response:', error);
-        document.getElementById("response-message").innerText = "Error parsing response";
-        return;  // Exit if parsing fails
-      }
+// Below are functions
 
-      const serviceResult = jsonObject["Service Result"];
-      document.getElementById("response-message").innerText = `Service Result: ${serviceResult}`;
-    } else {
-      console.error('Server responded with error:', response.statusText);
-      document.getElementById("response-message").innerText = `Server Error: ${response.statusText}`;
-    }
-  } catch (error) {
-    console.error('Error occurred while sending data to server:', error);
-    document.getElementById("response-message").innerText = "Error sending data";
-  }
-});
-
-// Function to start listening for messages from the server
-function startListening() {
-  // Create a new WebSocket connection to the specified IP and port
-  socket = new WebSocket('ws://192.168.1.11:6888');
-  console.log('Socket created and listening');
-
-  // Listen for messages from the server
-  socket.onmessage = function(event) {
-    // Get the data from the message
-    var data = event.data;
-
-    //Parse the data from the message
-    var jsonData = JSON.parse(data);
-    console.log('Received search data:', jsonData);
-
-    // Find the search-response div
-    var searchResponse = document.getElementById('search-response');
-
-    // Add the data to the search-response div
-    searchResponse.textContent += JSON.stringify(jsonData, null, 2) + '\n';
-  };
-
-  // Handle connection errors
-  socket.onerror = function(event) {
-    var searchResponse = document.getElementById('search-response');
-    searchResponse.textContent = 'Failed to connect. Please check the server.';
-  };
+tab1Next.onclick = function() {
+    tab1.style.display = 'none';
+    tab1Header.classList.remove('active');
+    tab2Header.classList = "active";
+    tab2.style.display = 'block';
+}
+tab2Next.onclick = function() {
+    tab2.style.display = 'none';
+    tab2Header.classList.remove('active');
+    tab3Header.classList = "active";
+    tab3.style.display = 'block';
+}
+tab3Next.onclick = function() {
+    tab3.style.display = 'none';
+    tab3Header.classList.remove('active');
+    tab4Header.classList = "active";
+    tab4.style.display = 'block';
+}
+tab4Next.onclick = function() {
+    tab4.style.display = 'none';
+    tab4Header.classList.remove('active');
+    tab5Header.classList = "active";
+    tab5.style.display = 'block';
+}
+tab5Next.onclick = function() {
+    tab5.style.display = 'none';
+    tab5Header.classList.remove('active');
+    tab6Header.classList = "active";
+    tab6.style.display = 'block';
 }
 
-// Function to stop listening for messages from the server
-function stopListening() {
-  if (socket) {
-    socket.close();
-    console.log('Socket closed');
-    socket = null;
-  }
+tab2Previous.onclick = function() {
+    tab2.style.display = 'none';
+    tab2Header.classList.remove('active');
+    tab1Header.classList = 'active';
+    tab1.style.display = 'block';
 }
 
-// Start listening when the "Start Socket Search" button is pressed
-document.getElementById('startSocketSearch').addEventListener('click', startListening);
+tab3Previous.onclick = function() {
+    tab3.style.display = 'none';
+    tab3Header.classList.remove('active');
+    tab2Header.classList = 'active';
+    tab2.style.display = 'block';
+}
+tab4Previous.onclick = function() {
+    tab4.style.display = 'none';
+    tab4Header.classList.remove('active');
+    tab3Header.classList = 'active';
+    tab3.style.display = 'block';
+}
+tab5Previous.onclick = function() {
+    tab5.style.display = 'none';
+    tab5Header.classList.remove('active');
+    tab4Header.classList = 'active';
+    tab4.style.display = 'block';
+}
+tab6Previous.onclick = function() {
+    tab6.style.display = 'none';
+    tab6Header.classList.remove('active');
+    tab5Header.classList = 'active';
+    tab5.style.display = 'block';
+}
 
-// Stop listening when the "Stop Socket Search" button is pressed
-document.getElementById('stopSocketSearch').addEventListener('click', stopListening);
-
-// NEEDS TESTING
-// // Start listening when the "Start Socket Search" button is pressed
-// document.getElementById('startSocketSearch').addEventListener('click', startListening);
-
-// // Stop listening when the "Stop Socket Search" button is pressed
-// document.getElementById('stopSocketSearch').addEventListener('click', stopListening);
-
-// // Function to start listening for messages from the server
-// function startListening() {
-//   // Create a new WebSocket connection to the specified IP and port
-//   socket = new WebSocket('ws://192.168.1.40:6888');
-//   console.log('Socket created and listening');
-
-//   // Listen for messages from the server
-//   socket.onmessage = function(event) {
-//     // Get the data from the message
-//     var data = event.data;
-
-//     // Parse the data from the message
-//     var jsonData = JSON.parse(data);
-//     console.log('Received search data:', jsonData);
-
-//     // Find the search-response div
-//     var searchResponse = document.getElementById('search-response');
-
-//     // **Update for Bullet Points:**
-//     //   - Create a list element (LI) for each received message
-//     let listItem = document.createElement('li');
-//     listItem.textContent = JSON.stringify(jsonData, null, 2);  // Formatted JSON
-    
-//     //   - Append the list item to the search-response div
-//     searchResponse.appendChild(listItem);
-//   };
-
-//   // Handle connection errors
-//   socket.onerror = function(event) {
-//     var searchResponse = document.getElementById('search-response');
-//     searchResponse.textContent = 'Failed to connect. Please check the server.';
-//   };
-// }
+getthings.onclick = function() {
+  
+}

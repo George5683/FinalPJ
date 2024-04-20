@@ -2,6 +2,7 @@ const express = require('express');
 const net = require('net');
 const path = require('path');
 const bodyParser = require('body-parser');
+const dgram = require('dgram');
 
 const app = express();
 const port = 8000;
@@ -11,6 +12,13 @@ let info;
 let response = ''; // Initialize an empty string to store the response
 let jsonObject;
 
+let searchData;
+let multicastSocket;
+
+// Define multicast IP and port as variables (you can change these)
+const MCIp = '224.0.0.1'; // Replace with actual multicast group address
+const MCPort = 1235; // Replace with multicast port used
+
 // Middleware to parse JSON bodies (npm install express body-parser)
 app.use(bodyParser.json());
 
@@ -18,26 +26,38 @@ app.use(bodyParser.json());
 app.use(express.static(staticPath));
 
 // Only for Functions
-function listenToSocket(ip, port) {
-  const server = net.createServer((socket) => {
-    socket.on('data', (data) => {
-      try {
-        // Parse the received data as JSON and store it in searchData
-        searchData = JSON.parse(data);
-        console.log('Received search data:', searchData);
-      } catch (err) {
-        console.error('Failed to parse received data:', err);
-      }
-    });
+function startMulticastListening(multicastIp, multicastPort) {
+  if (!multicastIp || !multicastPort) {
+    throw new Error('Missing multicast IP or port');
+  }
 
-    socket.on('error', (err) => {
-      console.error('Socket error:', err);
-    });
+  multicastSocket = dgram.createSocket('udp4', (message, remote) => {
+    try {
+      // Parse the received data as JSON (if applicable)
+      const searchData = JSON.parse(message.toString());
+      console.log(`Received data from ${remote.address}:${remote.port}`, searchData);
+    } catch (err) {
+      console.error('Failed to parse received data:', err);
+    }
   });
 
-  server.listen(port, ip, () => {
-    console.log(`Server listening on ${ip}:${port}`);
+  // Join the multicast group
+  multicastSocket.joinMulticast(multicastIp, () => {
+    console.log(`Listening for multicast on ${multicastIp}:${multicastPort}`);
   });
+
+  multicastSocket.on('error', (err) => {
+    console.error('Socket error:', err);
+  });
+}
+
+function stopMulticastListening() {
+  if (multicastSocket) {
+    multicastSocket.close(); // Close the socket
+    console.log('Stopped listening for multicast');
+  } else {
+    console.warn('Multicast listening is not started yet.');
+  }
 }
 
 function sendUnicastMessage(message, ip, targetPort) {
@@ -70,6 +90,8 @@ function sendUnicastMessage(message, ip, targetPort) {
     });
   });
 }
+
+startMulticastListening(MCPort, MCIp);
 
 app.put('/unicast', (req, res) => {
   const { thingId, ServiceName, ServiceIp, Input } = req.body; // Extract all data

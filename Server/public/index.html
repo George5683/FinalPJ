@@ -1,61 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IoT Dashboard</title>
-  <style>
-    /* Add your CSS styling here */
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IOT</title>
+    <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
   <h1>IoT Dashboard</h1> 
-    <h2>Things</h2>
-    <!-- label for things available -->
-    <label for="things">Things Available: </label>
-    <br>
-    <!-- Button to start socket search -->
-    <button id="startSocketSearch">Start Socket Search</button>
-    <!-- Button to Stop socket search -->
-    <button id="stopSocketSearch">Stop Socket Search</button>
-    <br>
-    <ul id="search-response"></ul>    
-    <h2>Services</h2>
-    <!-- label for services available -->
-    <label for="services">Services Available: </label>
-    <br>
-    <!-- id for the available services -->
-    <div id="available-services"></div>
-    <h2>Relationships</h2>
-    <h2>Apps</h2>
-    <h2>Editor</h2>
+    <section class="tab-container">
+        <section class="tabs">
+            <button id="tab-1-btn" class="active">1. Things</button>
+            <button id="tab-2-btn">2. Services</button>
+            <button id="tab-3-btn">3. Relationships</button>
+            <button id="tab-4-btn">4. Editor</button>
+            <button id="tab-5-btn">5. Apps</button>
+            <button id="tab-6-btn">6. App Manager</button>
+        </section>
 
-  <!-- How to do a service call for later -->
-  <h2>Service Call</h2>
-    <label for="service">Target Service:</label>
-      <select id="service">
-        <option value="LEDChange">LED</option>
-        <option value="TEMP">TEMP</option>
-      </select>
-    <br>
-    <label for="thingID">ThingID:</label>
-    <input type="text" id="thingID" name="thingID" required>
-    <br>
-    <label for="serviceName">Service Name:</label>
-    <input type="text" id="serviceName" name="serviceName" required>
-    <br>
-    <label for="ServiceInput">Service Input: (If several inputs, seperate by a comma)</label>
-    <input type="text" id="ServiceInput" name="ServiceInput">
-    <br>
-    <label for="ServiceIp">Service IP:</label>
-    <input type="text" id="ServiceIp" name="ServiceIp" required>
-    <br>
-    <button id="unicastcall">Send Unicast Call</button>
-    <h2>Received Message</h2>
-      <div id="response-message"></div>
-  
-    
-
-    <script src="client.js"></script>
+        <section id="tab-1-section">
+            <p><strong>Search for a Thing:</strong></p>
+            <button type="button" id="get-things" class="get-things">Get Things</button>
+            <div class="vertical-box">
+              <p id="thing-results"></p>
+            </div>
+            <button type="button" id="tab1-next" class="next-btn">Next</button>
+        </section>
+        <section id="tab-2-section" class="hide">
+          <p><strong>Search for Services:</strong></p>
+          <div class="vertical-box">
+            <p id="service-results"></p>
+          </div>
+                <div class="btn-container">
+                    <button class="previous-btn" id="tab2-previous">Previous</button>
+                    <button class="next-btn" id="tab2-next">Next</button>
+                </div>
+        </section>
+        <section id="tab-3-section" class="hide">
+          <p><strong>Search for Relationships:</strong></p>
+          <div class="vertical-box">
+            <p id="relationship-results"></p>
+          </div>
+          <div class="btn-container">
+            <button class="previous-btn" id="tab3-previous">Previous</button>
+            <button class="next-btn" id="tab3-next">Next</button>
+        </div>
+        </section>
+        <section id="tab-4-section" class="hide">
+          <p><strong>Editor:</strong></p>
+          <div class="btn-container">
+            <button class="previous-btn" id="tab4-previous">Previous</button>
+            <button class="next-btn" id="tab4-next">Next</button>
+          </section>
+        <section id="tab-5-section" class="hide">
+          <p><strong>Apps:</strong></p>
+          <div class="btn-container">
+            <button class="previous-btn" id="tab5-previous">Previous</button>
+            <button class="next-btn" id="tab5-next">Next</button>
+          </section>
+        <section id="tab-6-section" class="hide">
+          <p><strong>App Manager:</strong></p>
+          <div class="btn-container">
+            <button class="previous-btn" id="tab6-previous">Previous</button>
+          </section>
+    </section>
 </body>
 </html>
+
+<script src="client.js"></script>
