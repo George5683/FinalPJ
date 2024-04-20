@@ -27,7 +27,7 @@ let tab5Header = document.getElementById('tab-5-btn');
 let tab6Header = document.getElementById('tab-6-btn');
 
 let getthings = document.getElementById('get-things');
-
+let getServices = document.getElementById('get-services');
 // Below are functions
 
 tab1Next.onclick = function() {
@@ -94,5 +94,24 @@ tab6Previous.onclick = function() {
 }
 
 getthings.onclick = function() {
-  
+
+}
+getServices.onclick = async function () {
+    const currentService = await fetchData('/Services');
+    const serviceBox = document.getElementById('service-results');
+    serviceBox.innerText = currentService;
+}
+
+
+
+
+// Function to send a GET request to the specified endpoint
+async function fetchData(endpoint) {
+    try {
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
 }

@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const dgram = require('dgram');
 const fs = require('fs');
 const readline = require('node:readline')
+const parser = require('./parsers')
 
 const app = express();
 const port = 8000;
@@ -34,40 +35,12 @@ app.use(bodyParser.json());
 // Serve static files from the public directory
 app.use(express.static(staticPath));
 
+//Contains all info about every Entity, Id, Service etc
+var Connections = [];
+
+
 // Only for Functions
-function startMulticastListening(multicastIp, multicastPort) {
-  if (!multicastIp || !multicastPort) {
-    throw new Error('Missing multicast IP or port');
-  }
 
-  multicastSocket = dgram.createSocket('udp4', (message, remote) => {
-    try {
-      // Parse the received data as JSON (if applicable)
-      const searchData = JSON.parse(message.toString());
-      console.log(`Received data from ${remote.address}:${remote.port}`, searchData);
-    } catch (err) {
-      console.error('Failed to parse received data:', err);
-    }
-  });
-
-   //Join the multicast group
- // multicastSocket.joinMulticast(multicastIp, () => {
- //   console.log(`Listening for multicast on ${multicastIp}:${multicastPort}`);
-  //});
-
-  multicastSocket.on('error', (err) => {
-    console.error('Socket error:', err);
-  });
-}
-
-function stopMulticastListening() {
-  if (multicastSocket) {
-    multicastSocket.close(); // Close the socket
-    console.log('Stopped listening for multicast');
-  } else {
-    console.warn('Multicast listening is not started yet.');
-  }
-}
 
 function sendUnicastMessage(message, ip, targetPort) {
   return new Promise((resolve, reject) => {
@@ -188,10 +161,16 @@ function readFile(FileName) {
 
 }
 
+app.get("/Services",(req, res) =>{
+  //get json value, then push it to service array
 
+  let Services;
+  Services = parser.Services(Connections);
+  console.log(Services);
+  res.json(JSON.stringify(Services));
 
-
-
+  //res.end();
+})
 //Get Saved Files
 app.get(`/Saves`, (req, res,) => {
   SaveList = "Files to read";
@@ -214,6 +193,29 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(staticPath, 'index.html'));
 });
 
+var MULTIPORT = 1235;
+var MCAST_ADDR = "232.1.1.1"; //not your IP and should be a Class D address, see http://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml
+var server = dgram.createSocket("udp4");
+server.bind(MULTIPORT, function(){
+  server.setBroadcast(true);
+  server.setMulticastTTL(128);
+  server.addMembership(MCAST_ADDR);
+});
+
+
+
+server.on('message', function (message,remote){
+  console.log('MCast Msg: From: ' + remote.address + ':' + remote.port +' - ' + message);
+})
+
+function broadcastNew() {
+  var message = new Buffer(news[Math.floor(Math.random()*news.length)]);
+  server.send(message, 0, message.length, MULTIPORT,MCAST_ADDR);
+  console.log("Sent " + message + " to the wire...");
+}
+
+
+
 
 
 
@@ -221,6 +223,9 @@ app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 
 
+
+
+/*
   rl.question(`What do you want to do? Make or Read`, option => {
     if(option === 'Make' || option === 'make'){
       rl.question(`Enter a file name`, name => {
@@ -237,6 +242,6 @@ app.listen(port, () => {
       });
     }
   });
-
+*/
 
 });
