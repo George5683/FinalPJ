@@ -73,8 +73,6 @@ function sendUnicastMessage(message, ip, targetPort) {
   });
 }
 
-startMulticastListening(MCPort, MCIp);
-
 app.put('/unicast', (req, res) => {
   const { thingId, ServiceName, ServiceIp, Input } = req.body; // Extract all data
   console.log("thingId,serviceName gotten in /unicast");
