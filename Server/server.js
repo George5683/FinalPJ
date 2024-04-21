@@ -36,8 +36,12 @@ app.use(bodyParser.json());
 app.use(express.static(staticPath));
 
 //Contains all info about every Entity, Id, Service etc
-var Connections = [];
 
+var Connections = [];
+var Things = [];
+var Entities = [];
+var Services = [];
+var Relationships = [];
 
 // Only for Functions
 
@@ -72,6 +76,8 @@ function sendUnicastMessage(message, ip, targetPort) {
     });
   });
 }
+
+
 
 app.put('/unicast', (req, res) => {
   const { thingId, ServiceName, ServiceIp, Input } = req.body; // Extract all data
@@ -148,7 +154,6 @@ function createFile(name){
 
 function readFile(FileName) {
   pathSaves = __dirname + '/public/Saves/';
-
   fs.readFile(pathSaves + "/" + FileName + ".txt", 'utf8', (err, data) => {
     if (err) {
       console.error(err);
@@ -161,14 +166,13 @@ function readFile(FileName) {
 
 app.get("/Services",(req, res) =>{
   //get json value, then push it to service array
-
-  let Services;
-  Services = parser.Services(Connections);
+  console.log("GET /Services");
   console.log(Services);
   res.json(JSON.stringify(Services));
-
   //res.end();
 })
+
+
 //Get Saved Files
 app.get(`/Saves`, (req, res,) => {
   SaveList = "Files to read";
@@ -191,23 +195,79 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(staticPath, 'index.html'));
 });
 
-var MULTIPORT = 1235;
-var MCAST_ADDR = "232.1.1.1"; //not your IP and should be a Class D address, see http://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml
-var server = dgram.createSocket("udp4");
-server.bind(MULTIPORT, function(){
-  server.setBroadcast(true);
-  server.setMulticastTTL(128);
-  server.addMembership(MCAST_ADDR);
-});
+function MultiConnect(){
+  var MULTIPORT = 1235;
+  var MCAST_ADDR = "232.1.1.1";
+  var server = dgram.createSocket("udp4");
+  server.bind(MULTIPORT, function(){
+    server.setBroadcast(true);
+    server.setMulticastTTL(128);
+    server.addMembership(MCAST_ADDR);
+  });
 
 
 
-server.on('message', function (message,remote){
-  console.log('MCast Msg: From: ' + remote.address + ':' + remote.port +' - ' + message);
-  var JsonRaw = message.toJSON()
+  server.on('message', function (multicastMessage,remote){
+    let ParsedMessage = multicastMessage.toString();
+    console.log('MCast Msg: From: ' + remote.address + ':' + remote.port +' - \n' + multicastMessage);
+    ParsedMessage = ParsedMessage.replace('\"Input\"', '\\\"Input\\\"');
+    ParsedMessage = ParsedMessage.replace(/\s/g, '');
+    ParsedMessage = JSON.parse(ParsedMessage)
+    var filter = "TweetType";
+    //console.log(ParsedMessage);
+    switch (ParsedMessage[filter]){
+
+      case 'Service':
+        console.log("Services:");
+        console.log(Services);
+        let newService = parser.Services(Services, ParsedMessage);
+        if(newService === null){
+          break;
+        }
+        else{
+          Services.push(newService);
+        }
+        break;
+
+      case "Relationship":
+        //need relationships to continue
+        console.log("Relationship");
+        break;
+
+      case "Identity_Thing":
+        console.log("Identity_Thing:");
+        console.log(Things);
+        let newThing = parser.Things(Things, ParsedMessage);
+        if(newThing === null){
+          break;
+        }
+        else{
+          Things.push(newThing);
+        }
+        break;
+
+      case "Identity_Language":
+        console.log("Identity_Language");
+        break;
+
+      case "Identity_Entity":
+        console.log("Identity_Entity:");
+        console.log(Entities);
+        let newEntity = parser.Entities(Entities, ParsedMessage);
+        if(newEntity === null){
+          break;
+        }
+        else{
+          Entities.push(newEntity);
+        }
+        break;
+    }
+  })
+
+}
 
 
-})
+
 
 function broadcastNew() {
   var message = new Buffer(news[Math.floor(Math.random()*news.length)]);
@@ -224,6 +284,8 @@ app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 
 
+
+  MultiConnect();
 
 
 /*
