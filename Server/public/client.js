@@ -31,6 +31,90 @@ let getServices = document.getElementById('get-services');
 let getRelationships = document.getElementById('get-relationships');
 
 // Below are functions
+tab1Header.onclick = function() {
+    tab1.style.display = 'block';
+    tab2.style.display = 'none';
+    tab3.style.display = 'none';
+    tab4.style.display = 'none';
+    tab5.style.display = 'none';
+    tab6.style.display = 'none';
+    tab1Header.classList = 'active';
+    tab2Header.classList.remove('active');
+    tab3Header.classList.remove('active');
+    tab4Header.classList.remove('active');
+    tab5Header.classList.remove('active');
+    tab6Header.classList.remove('active');
+}
+tab2Header.onclick = function() {
+    tab2.style.display = 'block';
+    tab1.style.display = 'none';
+    tab3.style.display = 'none';
+    tab4.style.display = 'none';
+    tab5.style.display = 'none';
+    tab6.style.display = 'none';
+    tab2Header.classList = 'active';
+    tab1Header.classList.remove('active');
+    tab3Header.classList.remove('active');
+    tab4Header.classList.remove('active');
+    tab5Header.classList.remove('active');
+    tab6Header.classList.remove('active');
+}
+tab3Header.onclick = function() {
+    tab3.style.display = 'block';
+    tab1.style.display = 'none';
+    tab2.style.display = 'none';
+    tab4.style.display = 'none';
+    tab5.style.display = 'none';
+    tab6.style.display = 'none';
+    tab3Header.classList = 'active';
+    tab1Header.classList.remove('active');
+    tab2Header.classList.remove('active');
+    tab4Header.classList.remove('active');
+    tab5Header.classList.remove('active');
+    tab6Header.classList.remove('active');
+}
+tab4Header.onclick = function() {
+    tab4.style.display = 'block';
+    tab1.style.display = 'none';
+    tab2.style.display = 'none';
+    tab3.style.display = 'none';
+    tab5.style.display = 'none';
+    tab6.style.display = 'none';
+    tab4Header.classList = 'active';
+    tab1Header.classList.remove('active');
+    tab2Header.classList.remove('active');
+    tab3Header.classList.remove('active');
+    tab5Header.classList.remove('active');
+    tab6Header.classList.remove('active');
+}
+tab5Header.onclick = function() {
+    tab5.style.display = 'block';
+    tab1.style.display = 'none';
+    tab2.style.display = 'none';
+    tab3.style.display = 'none';
+    tab4.style.display = 'none';
+    tab6.style.display = 'none';
+    tab5Header.classList = 'active';
+    tab1Header.classList.remove('active');
+    tab2Header.classList.remove('active');
+    tab3Header.classList.remove('active');
+    tab4Header.classList.remove('active');
+    tab6Header.classList.remove('active');
+}
+tab6Header.onclick = function() {
+    tab6.style.display = 'block';
+    tab1.style.display = 'none';
+    tab2.style.display = 'none';
+    tab3.style.display = 'none';
+    tab4.style.display = 'none';
+    tab5.style.display = 'none';
+    tab6Header.classList = 'active';
+    tab1Header.classList.remove('active');
+    tab2Header.classList.remove('active');
+    tab3Header.classList.remove('active');
+    tab4Header.classList.remove('active');
+    tab5Header.classList.remove('active');
+}
 
 tab1Next.onclick = function() {
     tab1.style.display = 'none';
