@@ -6,20 +6,6 @@ const {response} = require("express");
 module.exports = {Services, Things, Entities};
 
 
-const rpitest1 = {
-    "RpiIdentifier": "rPi-test",
-    "ServiceName": "testservice",
-    "InputParameterNumber": "0",
-    "InputParameterName": "string"
-}
-const rpitest2 = {
-    "RpiIdentifier": "rrPi-test2",
-    "ServiceName": "testservice2",
-    "InputParameterNumber": "0",
-    "InputParameterName": "string"
-}
-
-
 function Services(Services, newService){
     delete newService["TweetType"];
     let isnew = true;

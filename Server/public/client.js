@@ -32,7 +32,7 @@ let getRelationships = document.getElementById('get-relationships');
 let submitbtn = document.getElementById('submit');
 
 
-
+let getApps = document.getElementById('get-apps');
 // Below are functions
 tab1Header.onclick = function() {
     tab1.style.display = 'block';
@@ -214,7 +214,11 @@ getRelationships.onclick = async function () {
     const serviceBox = document.getElementById('relationship-results');
     serviceBox.innerText = currentService;
 }
-
+getApps.onclick = async function () {
+    const currentService = await fetchData('/Saves');
+    const serviceBox = document.getElementById('app-results');
+    serviceBox.innerText = currentService;
+}
 
 
 

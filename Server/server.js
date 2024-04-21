@@ -23,7 +23,7 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-
+const pathSaves = __dirname + '/public/Saves/';
 
 // Define multicast IP and port as variables (you can change these)
 const MCIp = '224.0.0.1'; // Replace with actual multicast group address
@@ -37,11 +37,12 @@ app.use(express.static(staticPath));
 
 //Contains all info about every Entity, Id, Service etc
 
-var Connections = [];
-var Things = [];
-var Entities = [];
-var Services = [];
-var Relationships = [];
+const Connections = [];
+const Things = [];
+const Entities = [];
+const Services = [];
+const Relationships = [];
+
 
 // Only for Functions
 
@@ -134,10 +135,69 @@ app.put('/unicast', (req, res) => {
   }
 });
 
+
+
+app.get("/Services",(req, res) =>{
+  //get json value, then push it to service array
+  console.log("GET /Services");
+  console.log(Services);
+  res.json(JSON.stringify(Services));
+})
+
+app.get("/Things",(req, res) =>{
+  //get json value, then push it to service array
+  console.log("GET /Things");
+  console.log(Things);
+  res.json(JSON.stringify(Things));
+})
+app.get("/Relationships",(req, res) =>{
+  //get json value, then push it to service array
+  console.log("GET /Relationships");
+  console.log(Relationships);
+  res.json(JSON.stringify(Relationships));
+})
+
+//Get Saved Files
+app.get(`/Saves`, (req, res,) => {
+  const SavedApps = [];
+  fs.readdir(pathSaves, (error, files) => {
+    if(error){
+      console.error("Couldn't read directory");
+    }
+    const Saves = files.filter(file => path.extname(file).toLowerCase() === '.txt');
+    Saves.forEach(SingleSave => {
+      console.log("Saved file: " + SingleSave);
+      const filePath = path.join(pathSaves, SingleSave);
+      fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+          console.error('Error reading file:', err);
+          return;
+        }
+        SavedApps.push(JSON.parse(data));
+        console.log(JSON.parse(data));
+      });
+
+    });
+
+  });
+  res.json(SavedApps);
+})
+//Create Saved Files
+app.put(`/Saves`,(req, res,) => {
+  SaveList = "Files to Save";
+
+
+  res.status(100);
+})
+
+// Handle any unmatched routes and serve index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(staticPath, 'index.html'));
+});
+
 function createFile(name){
   try{
     content = "temp stuff"
-    pathSaves = __dirname + '/public/Saves/';
     fs.writeFile(pathSaves + name + ".txt", content, error => {
       if(error){
         console.error(error);
@@ -152,48 +212,6 @@ function createFile(name){
   }
 }
 
-function readFile(FileName) {
-  pathSaves = __dirname + '/public/Saves/';
-  fs.readFile(pathSaves + "/" + FileName + ".txt", 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.log(data);
-  });
-
-}
-
-app.get("/Services",(req, res) =>{
-  //get json value, then push it to service array
-  console.log("GET /Services");
-  console.log(Services);
-  res.json(JSON.stringify(Services));
-  //res.end();
-})
-
-
-//Get Saved Files
-app.get(`/Saves`, (req, res,) => {
-  SaveList = "Files to read";
-
-
-  res.json(SaveList);
-})
-//Create Saved Files
-app.put(`/Saves`,(req, res,) => {
-  SaveList = "Files to Save";
-
-
-  res.status(100);
-})
-
-
-
-// Handle any unmatched routes and serve index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(staticPath, 'index.html'));
-});
 
 function MultiConnect(){
   var MULTIPORT = 1235;
@@ -218,8 +236,8 @@ function MultiConnect(){
     switch (ParsedMessage[filter]){
 
       case 'Service':
-        console.log("Services:");
-        console.log(Services);
+        //console.log("Services:");
+        //console.log(Services);
         let newService = parser.Services(Services, ParsedMessage);
         if(newService === null){
           break;
@@ -235,8 +253,8 @@ function MultiConnect(){
         break;
 
       case "Identity_Thing":
-        console.log("Identity_Thing:");
-        console.log(Things);
+        //console.log("Identity_Thing:");
+        //console.log(Things);
         let newThing = parser.Things(Things, ParsedMessage);
         if(newThing === null){
           break;
@@ -247,12 +265,12 @@ function MultiConnect(){
         break;
 
       case "Identity_Language":
-        console.log("Identity_Language");
+        //console.log("Identity_Language");
         break;
 
       case "Identity_Entity":
-        console.log("Identity_Entity:");
-        console.log(Entities);
+        //console.log("Identity_Entity:");
+        //console.log(Entities);
         let newEntity = parser.Entities(Entities, ParsedMessage);
         if(newEntity === null){
           break;
@@ -263,11 +281,7 @@ function MultiConnect(){
         break;
     }
   })
-
 }
-
-
-
 
 function broadcastNew() {
   var message = new Buffer(news[Math.floor(Math.random()*news.length)]);
@@ -277,15 +291,11 @@ function broadcastNew() {
 
 
 
-
-
-
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
-
-
-
   MultiConnect();
+
+
 
 
 /*
@@ -298,11 +308,7 @@ app.listen(port, () => {
       });
     }
     else if(option === 'Read' || option === 'read') {
-      rl.question(`Enter a file name`, name => {
-        console.log(`Reading ${name}`);
-        readFile(name);
-        rl.close();
-      });
+
     }
   });
 */
