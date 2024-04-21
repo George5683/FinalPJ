@@ -52,31 +52,25 @@
         <section id="tab-4-section" class="hide">
           <p><strong>Editor:</strong></p>
           <h2>Type 1 (Ordered set of Services):</h2>
-          <select id="Type1-A">
-          </select>
-          <select id="Type1-B">
-          </select>
-          <select id="Type1-C">
-          </select>
+          <input type="text" id="Type1-A">
+          <input type="text" id="Type1-B">
+          <input type="text" id="Type1-C">
           <h2>Type 2 (Linking Service A to service B):</h2>
           <label for="type2">If (Select Service A) runs to execution</label>
-          <select id="Type2-A-options">
-          </select>
+          <input type="text" id="Type2-A">
           <label for="type2">Then run (Select Service B)</label>
-          <select id="Type2-B-options">
-          </select>
+          <input type="text" id="Type2-B">
           <h2>Type 3 (Condition-Based Relationship):</h2>
           <label for="type3">If (Select Service A)</label>
-          <select id="Type3-A">
-          </select>
+          <input type="text" id="Type3-A">
           <label for="type3-If">Is (Select Condition)</label>
           <select id="condition">
             <option value="On">On</option>
             <option value="OFF">OFF</option>
         </select>
           <label for="type3-Then">Then run (Select Service B)</label>
-          <select id="Type3-B">
-          </select>
+          <input type="text" id="Type3-B">
+          <button class="submit" id="sumbit">Submit all Types</button>
           <div class="btn-container">
             <button class="previous-btn" id="tab4-previous">Previous</button>
             <button class="next-btn" id="tab4-next">Next</button>
