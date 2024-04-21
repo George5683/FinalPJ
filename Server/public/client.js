@@ -29,7 +29,10 @@ let tab6Header = document.getElementById('tab-6-btn');
 let getThings = document.getElementById('get-things');
 let getServices = document.getElementById('get-services');
 let getRelationships = document.getElementById('get-relationships');
-let submitbtn = document.getElementById('submit');
+
+let submitbtn_type1 = document.getElementById('submittype1');
+let submitbtn_type2 = document.getElementById('submittype2');
+let submitbtn_type3 = document.getElementById('submittype3');
 
 
 
@@ -184,18 +187,22 @@ tab6Previous.onclick = function() {
     tab5.style.display = 'block';
 }
 
-// code to get the inputs by the user
-submitbtn.onclick = async function () {
+
+submitbtn_type1.onclick = async function () {
     let type1A= document.getElementById('Type1-A').value;
     let type1B= document.getElementById('Type1-B').value;
     let type1C= document.getElementById('Type1-C').value;
+}
+submitbtn_type2.onclick = async function () {
     let type2A= document.getElementById('Type2-A').value;
     let type2B= document.getElementById('Type2-B').value;
+}
+
+submitbtn_type3.onclick = async function () {
     let type3A= document.getElementById('Type3-A').value;
     let type3B= document.getElementById('Type3-B').value;
     // for conditions, its either on or off (potentiometer is half way is on (output = 1), otherwise off (Output = 0))
     let condition = document.getElementById('condition').value;
-
 }
 
 getThings.onclick = async function () {
