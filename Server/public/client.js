@@ -29,6 +29,9 @@ let tab6Header = document.getElementById('tab-6-btn');
 let getThings = document.getElementById('get-things');
 let getServices = document.getElementById('get-services');
 let getRelationships = document.getElementById('get-relationships');
+let submitbtn = document.getElementById('submit');
+
+
 
 // Below are functions
 tab1Header.onclick = function() {
@@ -86,6 +89,7 @@ tab4Header.onclick = function() {
     tab3Header.classList.remove('active');
     tab5Header.classList.remove('active');
     tab6Header.classList.remove('active');
+
 }
 tab5Header.onclick = function() {
     tab5.style.display = 'block';
@@ -115,6 +119,7 @@ tab6Header.onclick = function() {
     tab4Header.classList.remove('active');
     tab5Header.classList.remove('active');
 }
+
 
 tab1Next.onclick = function() {
     tab1.style.display = 'none';
@@ -179,6 +184,20 @@ tab6Previous.onclick = function() {
     tab5.style.display = 'block';
 }
 
+// code to get the inputs by the user
+submitbtn.onclick = async function () {
+    let type1A= document.getElementById('Type1-A').value;
+    let type1B= document.getElementById('Type1-B').value;
+    let type1C= document.getElementById('Type1-C').value;
+    let type2A= document.getElementById('Type2-A').value;
+    let type2B= document.getElementById('Type2-B').value;
+    let type3A= document.getElementById('Type3-A').value;
+    let type3B= document.getElementById('Type3-B').value;
+    // for conditions, its either on or off (potentiometer is half way is on (output = 1), otherwise off (Output = 0))
+    let condition = document.getElementById('condition').value;
+
+}
+
 getThings.onclick = async function () {
     const currentService = await fetchData('/Services');
     const serviceBox = document.getElementById('service-results');
@@ -195,6 +214,8 @@ getRelationships.onclick = async function () {
     const serviceBox = document.getElementById('relationship-results');
     serviceBox.innerText = currentService;
 }
+
+
 
 
 
