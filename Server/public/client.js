@@ -446,7 +446,7 @@ getRelationships.onclick = async function () {
             console.log(`Activate button clicked for app ${index}`);
         
             // Create the JSON data
-            const data = { appName: app.AppName };
+            const data = { AppName: app.AppName };
         
             // Send the JSON data to the endpoint
             fetch('/App-Activate', {
@@ -468,7 +468,7 @@ getRelationships.onclick = async function () {
             console.log(`Stop button clicked for app ${index}`);
 
             // Create the JSON data
-            const data = { appName: app.AppName };
+            const data = { AppName: app.AppName };
         
             // Send the JSON data to the endpoint
             fetch('/App-Stop', {
@@ -490,7 +490,7 @@ getRelationships.onclick = async function () {
         document.getElementById(`btn-delete-${index}`).onclick = function() {
             console.log(`Delete button clicked for app ${index}`);
             // Create the JSON data
-            const data = { appName: app.AppName };
+            const data = { AppName: app.AppName };
         
             // Send the JSON data to the endpoint
             fetch('/App-Delete', {
@@ -517,7 +517,7 @@ getRelationships.onclick = async function () {
             console.log(`Save button clicked for app ${index}`);
 
             // Create the JSON data
-            const data = { appName: app.AppName };
+            const data = { AppName: app.AppName };
         
             // Send the JSON data to the endpoint
             fetch('/App-Save', {
@@ -540,7 +540,7 @@ getRelationships.onclick = async function () {
             console.log(`Editor button clicked for app ${index}`);
 
             // Create the JSON data
-            const data = { appName: app.AppName };
+            const data = { AppName: app.AppName };
         
             // Send the JSON data to the endpoint
             fetch('/App-Editor', {
