@@ -205,22 +205,99 @@ submitbtn_type3.onclick = async function () {
     let condition = document.getElementById('condition').value;
 }
 
-getThings.onclick = async function () {
-    const currentService = await fetchData('/Things');
-    const serviceBox = document.getElementById('thing-results');
-    serviceBox.innerText = currentService;
-}
-
 getServices.onclick = async function () {
     const currentService = await fetchData('/Services');
+  
     const serviceBox = document.getElementById('service-results');
-    serviceBox.innerText = currentService;
-}
+    serviceBox.innerHTML = ""; // Clear previous content
+  
+    // Loop through each service object in the array
+    currentService.forEach((service) => {
+      // Create a new element for each service
+      const serviceElement = document.createElement('div');
+      serviceElement.classList.add('service'); // Add a CSS class for styling
+  
+      // Extract and display each feature
+      const features = `
+        <h2>Name: ${service.Name}</h2>
+        <p>ThingID: ${service.ThingID}</p>
+        <p>EntityID: ${service.EntityID}</p>
+        <p>SpaceID: ${service.SpaceID}</p>
+        <p>Vendor: ${service.Vendor}</p>
+        <p>API: ${service.API}</p>
+        <p>Type: ${service.Type}</p>
+        <p>AppCategory: ${service.AppCategory}</p>
+        <p>Description: ${service.Description}</p>
+        <p>Keywords: ${service.Keywords}</p>
+      `;
+  
+      serviceElement.innerHTML = features; // Set the content of the service element
+  
+      // Append the service element to the serviceBox
+      serviceBox.appendChild(serviceElement);
+    });
+  };
+
+getThings.onclick = async function () {
+    const currentThing = await fetchData('/Things');
+  
+    const thingBox = document.getElementById('thing-results');
+    thingBox.innerHTML = ""; // Clear previous content
+  
+    // Loop through each thing object in the array
+    currentThing.forEach((thing) => {
+      // Create a new element for each thing
+      const thingElement = document.createElement('div');
+      thingElement.classList.add('thing'); // Add a CSS class for styling
+  
+      // Extract and display each feature
+      const features = `
+      <h2>Name: ${thing.Name}</h2>
+      <p>ThingID: ${thing.ThingID}</p>
+      <p>SpaceID: ${thing.SpaceID}</p>
+      <p>Model: ${thing.Model}</p>
+      <p>Vendor: ${thing.Vendor}</p>
+      <p>Owner: ${thing.Owner}</p>
+      <p>Description: ${thing.Description}</p>
+      <p>OS: ${thing.OS}</p>
+      `;
+  
+      thingElement.innerHTML = features; // Set the content of the thing element
+  
+      // Append the thing element to the thingBox
+      thingBox.appendChild(thingElement);
+    });
+  };
+
 getRelationships.onclick = async function () {
-    const currentService = await fetchData('/Relationships');
-    const serviceBox = document.getElementById('relationship-results');
-    serviceBox.innerText = currentService;
-}
+    const currentRelationship = await fetchData('/Relationships');
+  
+    const relationshipBox = document.getElementById('relationship-results');
+    relationshipBox.innerHTML = ""; // Clear previous content
+  
+    // Loop through each relationship object in the array
+    currentRelationship.forEach((relationship) => {
+      // Create a new element for each relationship
+      const relationshipElement = document.createElement('div');
+      relationshipElement.classList.add('relationship'); // Add a CSS class for styling
+  
+      // Extract and display each feature
+      const features = `
+        <h2>ThingID: ${relationship.ThingID}</h2>
+        <p>SpaceID: ${relationship.SpaceID}</p>
+        <p>Name: ${relationship.Name}</p>
+        <p>Owner: ${relationship.Owner}</p>
+        <p>Category: ${relationship.Category}</p>
+        <p>Type: ${relationship.Type}</p>
+        <p>Description: ${relationship.Description}</p>
+      `;
+  
+      relationshipElement.innerHTML = features; // Set the content of the relationship element
+  
+      // Append the relationship element to the relationshipBox
+      relationshipBox.appendChild(relationshipElement);
+    });
+  }
 getApps.onclick = async function () {
     const currentService = await fetchData('/Saves');
     const serviceBox = document.getElementById('app-results');
