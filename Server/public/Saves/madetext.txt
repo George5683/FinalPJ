@@ -1,4 +1,5 @@
 {
+  "AppName": "madetext",
   "Instruction": [
     {
      "ServiceName": "LEDChange",
