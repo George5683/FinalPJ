@@ -141,14 +141,14 @@ app.get("/Services",(req, res) =>{
   //get json value, then push it to service array
   console.log("GET /Services");
   console.log(Services);
-  res.json(JSON.stringify(Services));
+  res.json((Services));
 })
 
 app.get("/Things",(req, res) =>{
   //get json value, then push it to service array
   console.log("GET /Things");
   console.log(Things);
-  res.json(JSON.stringify(Things));
+  res.json((Things));
 })
 app.get("/Relationships",(req, res) =>{
   //get json value, then push it to service array
@@ -156,7 +156,7 @@ app.get("/Relationships",(req, res) =>{
 
   console.log(Entities);
   console.log(Relationships);
-  res.json(JSON.stringify(Relationships));
+  res.json((Relationships));
 })
 
 //Get Saved Files
