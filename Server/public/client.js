@@ -37,6 +37,7 @@ let submitbtn_type3 = document.getElementById('submittype3');
 
 let getApps = document.getElementById('get-apps');
 let putApps = document.getElementById('put-apps');
+let go_to_editor = document.getElementById('go-to-editor');
 
 // Below are functions
 tab1Header.onclick = function() {
@@ -187,6 +188,21 @@ tab6Previous.onclick = function() {
     tab6Header.classList.remove('active');
     tab5Header.classList = 'active';
     tab5.style.display = 'block';
+}
+
+go_to_editor.onclick = function() {
+    tab4.style.display = 'block';
+    tab1.style.display = 'none';
+    tab2.style.display = 'none';
+    tab3.style.display = 'none';
+    tab5.style.display = 'none';
+    tab6.style.display = 'none';
+    tab4Header.classList = 'active';
+    tab1Header.classList.remove('active');
+    tab2Header.classList.remove('active');
+    tab3Header.classList.remove('active');
+    tab5Header.classList.remove('active');
+    tab6Header.classList.remove('active');
 }
 
 
