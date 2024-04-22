@@ -209,7 +209,16 @@ getServices.onclick = async function () {
     const currentService = await fetchData('/Services');
   
     const serviceBox = document.getElementById('service-results');
-    serviceBox.innerHTML = ""; // Clear previous content
+
+    //serviceBox.innerHTML = ""; // Clear previous content
+
+    // Check if currentService is an array with data
+    if (Array.isArray(currentService) && currentService.length > 0) {
+    serviceBox.innerHTML = ""; // Clear previous content (only if data exists)
+    } else {
+    // Handle no data scenario (optional)
+    serviceBox.innerHTML = "No Services Found"; // Example message
+    }
   
     // Loop through each service object in the array
     currentService.forEach((service) => {
@@ -242,7 +251,15 @@ getThings.onclick = async function () {
     const currentThing = await fetchData('/Things');
   
     const thingBox = document.getElementById('thing-results');
-    thingBox.innerHTML = ""; // Clear previous content
+    //thingBox.innerHTML = ""; // Clear previous content
+
+    // Check if currentThing is an array with data
+    if (Array.isArray(currentThing) && currentThing.length > 0) {
+    thingBox.innerHTML = ""; // Clear previous content (only if data exists)
+    } else {
+    // Handle no data scenario (optional)
+    thingBox.innerHTML = "No Things Found"; // Example message
+    }
   
     // Loop through each thing object in the array
     currentThing.forEach((thing) => {
@@ -273,7 +290,15 @@ getRelationships.onclick = async function () {
     const currentRelationship = await fetchData('/Relationships');
   
     const relationshipBox = document.getElementById('relationship-results');
-    relationshipBox.innerHTML = ""; // Clear previous content
+    //relationshipBox.innerHTML = ""; // Clear previous content
+
+    // Check if currentRelationship is an array with data
+    if (Array.isArray(currentRelationship) && currentRelationship.length > 0) {
+    relationshipBox.innerHTML = ""; // Clear previous content (only if data exists)
+    } else {
+    // Handle no data scenario (optional)
+    relationshipBox.innerHTML = "No Relationships Found"; // Example message
+    }
   
     // Loop through each relationship object in the array
     currentRelationship.forEach((relationship) => {
