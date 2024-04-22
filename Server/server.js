@@ -113,7 +113,7 @@ app.get("/Relationships",(req, res) =>{
 //Get Saved Files
 app.get(`/Saves`, (req, res,) => {
   console.log("here is new" + JSON.stringify(SavedApps));
-  res.json(JSON.stringify(SavedApps));
+  res.json((SavedApps));
 })
 
 //Create Saved Files
