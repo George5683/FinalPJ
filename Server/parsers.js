@@ -4,7 +4,7 @@ const http = require("http");
 const {response} = require("express");
 const net = require("net");
 
-module.exports = {Services, Things, EntityLanguage, ServiceRequest, ServiceCallCreator, AppRunner};
+module.exports = {Services, Things, EntityLanguage, ServiceRequest, ServiceCallCreator, AppFinder};
 
 
 function Services(Services, newService){
@@ -165,20 +165,15 @@ function ServiceRequest(requestJson){
     });
 }
 
-function AppRunner(AppName, SavedApps){
+function AppFinder(AppName, SavedApps){
     //find right app
-
     let AppJson;
     if(Array.isArray(SavedApps)){
         for(i = 0; i < SavedApps.length; i++){
-            if(SavedApps[i]["AppName"] === AppName){
+            if(SavedApps[i]["AppName"] === AppName["AppName"]){
                 AppJson = SavedApps[i];
-                console.log("Found App: " + JSON.stringify(AppJson));
             }
         }
     }
-    console.log("Here is the instructions");
-    console.log(JSON.stringify(AppJson["Instructions"]));
-
-
+    return[AppJson["Instruction"]];
 }

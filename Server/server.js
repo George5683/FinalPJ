@@ -76,11 +76,15 @@ app.put("/doservice", (req, res) =>{
 
 app.put(`/StartApp`, (req, res) => {
 
+  console.log("StartApp");
+  let AppName = req.body;
+  console.log("recieved: ");
+  console.log(AppName);
 
 
-  parser.AppRunner(AppName, SavedApps);
+  let RunApp = parser.AppFinder(AppName, SavedApps);
 
-
+  console.log(RunApp);
   res.status(200);
 })
 
@@ -109,7 +113,7 @@ app.get("/Relationships",(req, res) =>{
 //Get Saved Files
 app.get(`/Saves`, (req, res,) => {
   console.log("here is new" + JSON.stringify(SavedApps));
-  res.json(JSON.stringify(SavedApps));
+  res.json((SavedApps));
 })
 
 //Create Saved Files
