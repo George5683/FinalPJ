@@ -141,7 +141,7 @@ app.get("/Services",(req, res) =>{
   //get json value, then push it to service array
   console.log("GET /Services");
   console.log(Services);
-  res.json(Services);
+  res.json(JSON.stringify(Services));
 })
 
 app.get("/Things",(req, res) =>{
