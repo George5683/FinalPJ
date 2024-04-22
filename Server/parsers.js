@@ -79,3 +79,18 @@ function Things(Things, newThing){
     }
 }
 
+
+async function ServiceCall(){
+    const demoJson =
+    {
+        "Tweet Type": "Service call",
+        "Thing ID": "led",
+        "Space ID": "Lab4",
+        "Service Name": "change",
+        "Service Inputs": "(1)"
+    }
+
+
+
+
+}
