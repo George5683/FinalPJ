@@ -36,6 +36,8 @@ let submitbtn_type3 = document.getElementById('submittype3');
 
 
 let getApps = document.getElementById('get-apps');
+let putApps = document.getElementById('put-apps');
+
 // Below are functions
 tab1Header.onclick = function() {
     tab1.style.display = 'block';
@@ -327,8 +329,42 @@ getApps.onclick = async function () {
     const currentService = await fetchData('/Saves');
     const serviceBox = document.getElementById('app-results');
     serviceBox.innerText = currentService;
+
 }
 
+putApps.onclick = async function() {
+    const data = {
+        service1: "empty",
+        service2: "empty",
+        inputField: "empty"
+    };
+    try {
+
+        const response = await fetch('/doservice', {
+            method: 'PUT', // Use PUT method
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            console.log(responseData);
+        } else {
+            console.error('Server responded with error:', response.statusText);
+        }
+
+    } catch (error) {
+        console.error('Error occurred while sending data to server:', error);
+    }
+}
+/*
+    getApps.onclick = async function () {
+    const currentService = await fetchData('/Saves');
+    const serviceBox = document.getElementById('app-results');
+    serviceBox.innerText = currentService;
+ */
 
 
 
@@ -342,3 +378,4 @@ async function fetchData(endpoint) {
         console.error('Error fetching data:', error);
     }
 }
+
