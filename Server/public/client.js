@@ -207,13 +207,13 @@ submitbtn_type3.onclick = async function () {
 
 getThings.onclick = async function () {
     const currentService = await fetchData('/Things');
-    const serviceBox = document.getElementById('service-results');
+    const serviceBox = document.getElementById('thing-results');
     serviceBox.innerText = currentService;
 }
 
 getServices.onclick = async function () {
     const currentService = await fetchData('/Services');
-    const serviceBox = document.getElementById('thing-results');
+    const serviceBox = document.getElementById('service-results');
     serviceBox.innerText = currentService;
 }
 getRelationships.onclick = async function () {
