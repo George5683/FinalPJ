@@ -205,22 +205,84 @@ submitbtn_type1.onclick = async function () {
     // Assuming ServicesAvailable is an array of service names
     if (!ServicesAvailable.includes(type1A) || !ServicesAvailable.includes(type1B)) {
         outputElement.innerText = "At least one text box isn't an available service.";
+    } else {
+        // Send the types to an endpoint
+        let response = await fetch('/Type1', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                type1A: type1A,
+                type1B: type1B
+            })
+        });
+
+        if (!response.ok) {
+            console.error('Failed to send the types to the endpoint.');
+        }
     }
-    else(
-        
-    )
 };
+
 submitbtn_type2.onclick = async function () {
-    let type2A= document.getElementById('Type2-A').value;
-    let type2B= document.getElementById('Type2-B').value;
-}
+    let type2A = document.getElementById('Type2-A').value;
+    let type2B = document.getElementById('Type2-B').value;
+
+    // Get the output element
+    let outputElement = document.getElementById('type2-output');
+
+    // Assuming ServicesAvailable is an array of service names
+    if (!ServicesAvailable.includes(type2A) || !ServicesAvailable.includes(type2B)) {
+        outputElement.innerText = "At least one text box isn't an available service.";
+    } else {
+        // Send the types to an endpoint
+        let response = await fetch('/Type2', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                type2A: type2A,
+                type2B: type2B
+            })
+        });
+
+        if (!response.ok) {
+            console.error('Failed to send the types to the endpoint.');
+        }
+    }
+};
 
 submitbtn_type3.onclick = async function () {
-    let type3A= document.getElementById('Type3-A').value;
-    let type3B= document.getElementById('Type3-B').value;
-    // for conditions, its either on or off (potentiometer is half way is on (output = 1), otherwise off (Output = 0))
+    let type3A = document.getElementById('Type3-A').value;
+    let type3B = document.getElementById('Type3-B').value;
     let condition = document.getElementById('condition').value;
-}
+
+    // Get the output element
+    let outputElement = document.getElementById('type3-output');
+
+    // Assuming ServicesAvailable is an array of service names
+    if (!ServicesAvailable.includes(type3A) || !ServicesAvailable.includes(type3B)) {
+        outputElement.innerText = "At least one text box isn't an available service.";
+    } else {
+        // Send the types to an endpoint
+        let response = await fetch('/Type3', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                type3A: type3A,
+                type3B: type3B,
+                condition: condition
+            })
+        });
+
+        if (!response.ok) {
+            console.error('Failed to send the types to the endpoint.');
+        }
+    }
+};
 
 getServices.onclick = async function () {
     const currentService = await fetchData('/Services');
