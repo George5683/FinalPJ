@@ -190,6 +190,7 @@ tab6Previous.onclick = function() {
 }
 
 
+
 submitbtn_type1.onclick = async function () {
     let type1A= document.getElementById('Type1-A').value;
     let type1B= document.getElementById('Type1-B').value;
@@ -325,11 +326,167 @@ getRelationships.onclick = async function () {
       relationshipBox.appendChild(relationshipElement);
     });
   }
-getApps.onclick = async function () {
-    const currentService = await fetchData('/Saves');
-    const serviceBox = document.getElementById('app-results');
-    serviceBox.innerText = currentService;
 
+  getApps.onclick = async function () {
+    const serviceBox = document.getElementById('app-results');
+    const currentServices = await fetchData('/Saves');
+    console.log(JSON.stringify(currentServices));
+
+    serviceBox.innerHTML = ""; // Clear previous content
+
+    currentServices.forEach((app, index) => {
+        // Create a new div for each app
+        const appElement = document.createElement('div');
+
+        // Create a template string for the app data
+        const appData = `
+          <h2>${app.AppName}</h2>
+          <button id="btn-activate-${index}" class="get">Activate</button>
+          <button id="btn-stop-${index}" class="get">Stop</button>
+          <button id="btn-delete-${index}" class="get">Delete</button>
+          <button id="btn-save-${index}" class="get">Save</button>
+          <button id="btn-editor-${index}" class="get">Editor</button>
+          <!-- Add more properties as needed -->
+        `;
+
+        // Set the content of the app element
+        appElement.innerHTML = appData;
+
+        // Append the app element to the serviceBox
+        serviceBox.appendChild(appElement);
+
+        // Add onclick events to the buttons
+        document.getElementById(`btn-activate-${index}`).onclick = function() {
+            console.log(`Activate button clicked for app ${index}`);
+        
+            // Create the JSON data
+            const data = { appName: app.AppName };
+        
+            // Send the JSON data to the endpoint
+            fetch('/App-Activate', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        };
+        document.getElementById(`btn-stop-${index}`).onclick = function() {
+            console.log(`Stop button clicked for app ${index}`);
+
+            // Create the JSON data
+            const data = { appName: app.AppName };
+        
+            // Send the JSON data to the endpoint
+            fetch('/App-Stop', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            // Add your code here
+        };
+        document.getElementById(`btn-delete-${index}`).onclick = function() {
+            console.log(`Delete button clicked for app ${index}`);
+            // Create the JSON data
+            const data = { appName: app.AppName };
+        
+            // Send the JSON data to the endpoint
+            fetch('/App-Delete', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+            // Remove the app element from the serviceBox
+            serviceBox.removeChild(appElement);
+            // Add your code here
+        };
+        document.getElementById(`btn-save-${index}`).onclick = function() {
+            console.log(`Save button clicked for app ${index}`);
+
+            // Create the JSON data
+            const data = { appName: app.AppName };
+        
+            // Send the JSON data to the endpoint
+            fetch('/App-Save', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            // Add your code here
+        };
+        document.getElementById(`btn-editor-${index}`).onclick = function() {
+            console.log(`Editor button clicked for app ${index}`);
+
+            // Create the JSON data
+            const data = { appName: app.AppName };
+        
+            // Send the JSON data to the endpoint
+            fetch('/App-Editor', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+            tab4.style.display = 'block';
+            tab1.style.display = 'none';
+            tab2.style.display = 'none';
+            tab3.style.display = 'none';
+            tab5.style.display = 'none';
+            tab6.style.display = 'none';
+            tab4Header.classList = 'active';
+            tab1Header.classList.remove('active');
+            tab2Header.classList.remove('active');
+            tab3Header.classList.remove('active');
+            tab5Header.classList.remove('active');
+            tab6Header.classList.remove('active');
+            // Add your code here
+        };
+    });
 }
 
 putApps.onclick = async function() {
