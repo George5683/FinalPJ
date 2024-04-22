@@ -177,9 +177,8 @@ function AppRunner(AppName, SavedApps){
             }
         }
     }
-
-
-
+    console.log("Here is the instructions");
+    console.log(JSON.stringify(AppJson["Instructions"]));
 
 
 }

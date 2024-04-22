@@ -37,6 +37,8 @@ let submitbtn_type3 = document.getElementById('submittype3');
 
 let getApps = document.getElementById('get-apps');
 let putApps = document.getElementById('put-apps');
+let randomBtn = document.getElementById('randombtn');
+
 
 // Below are functions
 tab1Header.onclick = function() {
@@ -359,6 +361,12 @@ putApps.onclick = async function() {
         console.error('Error occurred while sending data to server:', error);
     }
 }
+
+randomBtn.onclick = async function(){
+
+}
+
+
 /*
     getApps.onclick = async function () {
     const currentService = await fetchData('/Saves');

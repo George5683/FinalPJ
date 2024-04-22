@@ -74,7 +74,9 @@ app.put("/doservice", (req, res) =>{
   }
 })
 
-app.put(`/Start/${AppName}`, (req, res) => {
+app.put(`/StartApp`, (req, res) => {
+
+
 
   parser.AppRunner(AppName, SavedApps);
 

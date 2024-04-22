@@ -1,4 +1,5 @@
 {
+  "AppName": "madetext",
   "messages": [
     {
      "TweetType": "tweetType",
