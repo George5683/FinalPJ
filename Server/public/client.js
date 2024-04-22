@@ -489,6 +489,12 @@ getRelationships.onclick = async function () {
         };
         document.getElementById(`btn-delete-${index}`).onclick = function() {
             console.log(`Delete button clicked for app ${index}`);
+
+            // Display a confirmation dialog
+            let confirmation = confirm('Are you sure you want to delete this item?');
+
+            if (confirmation) {
+            // If the user clicked 'OK', proceed with the deletion
             // Create the JSON data
             const data = { AppName: app.AppName };
         
@@ -511,7 +517,11 @@ getRelationships.onclick = async function () {
 
             // Remove the app element from the serviceBox
             serviceBox.removeChild(appElement);
-            // Add your code here
+
+            // Your deletion code here
+            }
+
+            
         };
         document.getElementById(`btn-save-${index}`).onclick = function() {
             console.log(`Save button clicked for app ${index}`);
