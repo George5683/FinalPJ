@@ -38,6 +38,8 @@ let submitbtn_type3 = document.getElementById('submittype3');
 let getApps = document.getElementById('get-apps');
 let putApps = document.getElementById('put-apps');
 
+let randomBtn = document.getElementById('randombtn');
+
 // Below are functions
 tab1Header.onclick = function() {
     tab1.style.display = 'block';
@@ -331,7 +333,7 @@ getApps.onclick = async function () {
     serviceBox.innerText = currentService;
 
 }
-
+/*
 putApps.onclick = async function() {
     const data = {
         service1: "empty",
@@ -359,13 +361,37 @@ putApps.onclick = async function() {
         console.error('Error occurred while sending data to server:', error);
     }
 }
+*/
+
+randomBtn.onclick = async function(){
+    let message = {
+        AppName: 'madetext'
+    };
+    const reply = await putfetchData('/StartApp', message);
+
+}
+
 /*
     getApps.onclick = async function () {
     const currentService = await fetchData('/Saves');
     const serviceBox = document.getElementById('app-results');
     serviceBox.innerText = currentService;
  */
-
+async function putfetchData(endpoint, data){
+    try {
+        const response = await fetch(endpoint, {
+            method: 'PUT', // Use PUT method
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        const data2 = await response.json();
+        return data2;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
 
 
 // Function to send a GET request to the specified endpoint
