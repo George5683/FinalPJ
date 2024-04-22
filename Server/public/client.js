@@ -259,7 +259,7 @@ getServices.onclick = async function () {
       // Append the service element to the serviceBox
       serviceBox.appendChild(serviceElement);
 
-      serviceNames = ServicesAvailable;
+      AvailableServices = serviceNames;
     });
   };
 
