@@ -1,5 +1,7 @@
 
 // Below are variables
+let ServicesAvailable;
+
 let tab1Next = document.getElementById('tab1-next');
 let tab2Next = document.getElementById('tab2-next');
 let tab3Next = document.getElementById('tab3-next');
@@ -194,9 +196,11 @@ tab6Previous.onclick = function() {
 
 
 submitbtn_type1.onclick = async function () {
+    const AvailableServices = await fetchData('/Services');
     let type1A= document.getElementById('Type1-A').value;
     let type1B= document.getElementById('Type1-B').value;
     let type1C= document.getElementById('Type1-C').value;
+
 }
 submitbtn_type2.onclick = async function () {
     let type2A= document.getElementById('Type2-A').value;
@@ -216,6 +220,7 @@ getServices.onclick = async function () {
     const serviceBox = document.getElementById('service-results');
 
     //serviceBox.innerHTML = ""; // Clear previous content
+    const serviceNames = [];
 
     // Check if currentService is an array with data
     if (Array.isArray(currentService) && currentService.length > 0) {
@@ -225,8 +230,12 @@ getServices.onclick = async function () {
     serviceBox.innerHTML = "No Services Found"; // Example message
     }
   
-    // Loop through each service object in the array
-    currentService.forEach((service) => {
+      // Loop through each service object in the array
+      currentService.forEach((service) => {
+
+      // Add the service name to the serviceNames array
+      serviceNames.push(service.Name);
+    
       // Create a new element for each service
       const serviceElement = document.createElement('div');
       serviceElement.classList.add('service'); // Add a CSS class for styling
@@ -249,6 +258,8 @@ getServices.onclick = async function () {
   
       // Append the service element to the serviceBox
       serviceBox.appendChild(serviceElement);
+
+      serviceNames = ServicesAvailable;
     });
   };
 
