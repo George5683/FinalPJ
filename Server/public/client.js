@@ -1,6 +1,7 @@
 
 // Below are variables
 let ServicesAvailable= [];
+let logbox = document.getElementById('Log');
 
 let tab1Next = document.getElementById('tab1-next');
 let tab2Next = document.getElementById('tab2-next');
@@ -430,7 +431,6 @@ getRelationships.onclick = async function () {
           <button id="btn-activate-${index}" class="get">Activate</button>
           <button id="btn-stop-${index}" class="get">Stop</button>
           <button id="btn-delete-${index}" class="get">Delete</button>
-          <button id="btn-save-${index}" class="get">Save</button>
           <button id="btn-editor-${index}" class="get">Editor</button>
           <!-- Add more properties as needed -->
         `;
@@ -440,6 +440,8 @@ getRelationships.onclick = async function () {
 
         // Append the app element to the serviceBox
         serviceBox.appendChild(appElement);
+
+        logbox.innerHTML = "Added Apps";
 
         // Add onclick events to the buttons
         document.getElementById(`btn-activate-${index}`).onclick = function() {
@@ -463,6 +465,8 @@ getRelationships.onclick = async function () {
             .catch((error) => {
                 console.error('Error:', error);
             });
+
+            logbox.innerHTML = "Activated App";
         };
         document.getElementById(`btn-stop-${index}`).onclick = function() {
             console.log(`Stop button clicked for app ${index}`);
@@ -486,6 +490,7 @@ getRelationships.onclick = async function () {
                 console.error('Error:', error);
             });
             // Add your code here
+            logbox.innerHTML = "Stopped App";
         };
         document.getElementById(`btn-delete-${index}`).onclick = function() {
             console.log(`Delete button clicked for app ${index}`);
@@ -519,32 +524,10 @@ getRelationships.onclick = async function () {
             serviceBox.removeChild(appElement);
 
             // Your deletion code here
+            logbox.innerHTML = "Deleted App";
             }
 
             
-        };
-        document.getElementById(`btn-save-${index}`).onclick = function() {
-            console.log(`Save button clicked for app ${index}`);
-
-            // Create the JSON data
-            const data = { AppName: app.AppName };
-        
-            // Send the JSON data to the endpoint
-            fetch('/App-Save', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-            // Add your code here
         };
         document.getElementById(`btn-editor-${index}`).onclick = function() {
             console.log(`Editor button clicked for app ${index}`);

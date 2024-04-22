@@ -71,6 +71,14 @@ form {
 body {
     background-color: #ade6df;
 }
+.log-box{
+    background-color: #f1f1f1; /* Set background color */
+    padding: 20px; /* Add padding for content spacing */
+    border: 1px solid #000000; /* Add a border */
+    margin: 10px; /* Add margin for spacing */
+    width: auto; /* Set the width of the box */
+
+}
 /*
 .services {
     display: flex;
