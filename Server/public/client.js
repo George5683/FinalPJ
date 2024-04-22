@@ -1,6 +1,6 @@
 
 // Below are variables
-let ServicesAvailable;
+let ServicesAvailable= [];
 
 let tab1Next = document.getElementById('tab1-next');
 let tab2Next = document.getElementById('tab2-next');
@@ -198,6 +198,9 @@ tab6Previous.onclick = function() {
 submitbtn_type1.onclick = async function () {
     let type1A = document.getElementById('Type1-A').value;
     let type1B = document.getElementById('Type1-B').value;
+
+    console.log("Type1A: " + type1A);
+    console.log("Type1B: " + type1B);
 
     // Get the output element
     let outputElement = document.getElementById('type1-output');
