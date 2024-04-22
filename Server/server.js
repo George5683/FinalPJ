@@ -45,97 +45,12 @@ const Services = [];
 const Relationships = [];
 const Apps = [];
 const SavedApps = [];
-
+const AppName = '';
 // Only for Functions
 
 
-function sendUnicastMessage(message, ip, targetPort) {
-  return new Promise((resolve, reject) => {
-    console.log("sending Message");
-    const client = new net.Socket();
-
-    client.connect({ host: ip, port: targetPort }, () => {
-      client.write(message);
-    });
-
-    client.on('data', (data) => {
-      response = data.toString();
-    });
-
-    client.on('error', (err) => {
-      reject(err);
-    });
-
-    client.on('close', () => {
-      try {
-        jsonObject = JSON.parse(response);
-        const serviceResult = jsonObject["Service Result"];
-        console.log("Service Result: ", serviceResult);
-        console.log('Response received:', response);
-        resolve(serviceResult);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  });
-}
 
 
-
-app.put('/unicast', (req, res) => {
-  const { thingId, ServiceName, ServiceIp, Input } = req.body; // Extract all data
-  console.log("thingId,serviceName gotten in /unicast");
-  console.log(Input);
-
-  // Validate the request body (optional)
-  try {
-    if (!thingId || !ServiceName) {
-      throw new Error('Missing required data in request body.');
-    }
-
-    // Check and assign ServiceInputs to Input
-    let ServiceInput;
-    if (Input && Input.trim()) {
-      // ServiceInputs has content, use it
-      ServiceInput = `(${Input})`;
-    } 
-    else {
-      // ServiceInputs is empty or only whitespace, use default
-      ServiceInput = "()";
-    }
-
-    const tweetType = "Service call";
-    const spaceId = "Lab4";
-
-    // Construct the message string using template literals
-    const message = `
-    {
-      "Tweet Type": "${tweetType}",
-      "Thing ID": "${thingId}",
-      "Space ID": "${spaceId}",
-      "Service Name": "${ServiceName}",
-      "Service Inputs": "${ServiceInput}"
-    }`;
-
-    console.log('Message sent:',message);
-
-    const targetPort = 6668;
-
-    // Send the constructed message over the socket and wait for response
-    sendUnicastMessage(message, ServiceIp, targetPort)
-      .then((serviceResult) => {
-        console.log('Service Result before send:', serviceResult);
-        res.status(200).send(response);
-      })
-      .catch((error) => {
-        console.error(error);
-        res.status(500).send('Error sending unicast call');
-      });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error sending unicast call');
-  }
-});
 
 app.put("/doservice", (req, res) =>{
 
@@ -157,9 +72,15 @@ app.put("/doservice", (req, res) =>{
     console.error(error);
     res.status(500).send('Error sending unicast call');
   }
-
 })
 
+app.put(`/Start/${AppName}`, (req, res) => {
+
+  parser.AppRunner(AppName, SavedApps);
+
+
+  res.status(200);
+})
 
 app.get("/Services",(req, res) =>{
   //get json value, then push it to service array
@@ -185,7 +106,7 @@ app.get("/Relationships",(req, res) =>{
 
 //Get Saved Files
 app.get(`/Saves`, (req, res,) => {
-  console.log("here is new" + SavedApps);
+  console.log("here is new" + JSON.stringify(SavedApps));
   res.json(JSON.stringify(SavedApps));
 })
 
