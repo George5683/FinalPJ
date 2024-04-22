@@ -7,6 +7,7 @@ const fs = require('fs');
 const readline = require('node:readline')
 const parser = require('./parsers')
 
+
 const app = express();
 const port = 8000;
 const staticPath = path.join(__dirname, 'public'); // Public folder for static files
@@ -39,10 +40,11 @@ app.use(express.static(staticPath));
 
 const Connections = [];
 const Things = [];
-const Entities = [];
+const EntityLanguages = [];
 const Services = [];
 const Relationships = [];
-
+const Apps = [];
+const SavedApps = [];
 
 // Only for Functions
 
@@ -135,6 +137,28 @@ app.put('/unicast', (req, res) => {
   }
 });
 
+app.put("/doservice", (req, res) =>{
+
+
+  let json1 = parser.ServiceCallCreator(Services, EntityLanguages, demoJson);
+
+  console.log(json1);
+  try{
+    parser.ServiceRequest(json1)
+        .then((serviceResult) => {
+          console.log('Service Result before send:', serviceResult);
+          res.status(200).send(response);
+        })
+        .catch((error) => {
+          console.error(error);
+          res.status(500).send('Error sending unicast call');
+        });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error sending unicast call');
+  }
+
+})
 
 
 app.get("/Services",(req, res) =>{
@@ -153,37 +177,18 @@ app.get("/Things",(req, res) =>{
 app.get("/Relationships",(req, res) =>{
   //get json value, then push it to service array
   console.log("GET /Relationships");
+  console.log(EntityLanguages);
 
-  console.log(Entities);
-  console.log(Relationships);
   res.json((Relationships));
+
 })
 
 //Get Saved Files
 app.get(`/Saves`, (req, res,) => {
-  const SavedApps = [];
-  fs.readdir(pathSaves, (error, files) => {
-    if(error){
-      console.error("Couldn't read directory");
-    }
-    const Saves = files.filter(file => path.extname(file).toLowerCase() === '.txt');
-    Saves.forEach(SingleSave => {
-      console.log("Saved file: " + SingleSave);
-      const filePath = path.join(pathSaves, SingleSave);
-      fs.readFile(filePath, 'utf8', (err, data) => {
-        if (err) {
-          console.error('Error reading file:', err);
-          return;
-        }
-        SavedApps.push(JSON.parse(data));
-        console.log(JSON.parse(data));
-      });
-
-    });
-
-  });
-  res.json(SavedApps);
+  console.log("here is new" + SavedApps);
+  res.json(JSON.stringify(SavedApps));
 })
+
 //Create Saved Files
 app.put(`/Saves`,(req, res,) => {
   SaveList = "Files to Save";
@@ -268,18 +273,18 @@ function MultiConnect(){
 
       case "Identity_Language":
         //console.log("Identity_Language");
+        let entityLanguage = parser.EntityLanguage(EntityLanguages, ParsedMessage, remote.address, remote.port);
+        if(entityLanguage === null){
+          break;
+        }
+        else{
+          EntityLanguages.push(entityLanguage);
+        }
         break;
 
       case "Identity_Entity":
         //console.log("Identity_Entity:");
         //console.log(Entities);
-        let newEntity = parser.Entities(Entities, ParsedMessage);
-        if(newEntity === null){
-          break;
-        }
-        else{
-          Entities.push(newEntity);
-        }
         break;
     }
   })
@@ -292,15 +297,61 @@ function broadcastNew() {
 }
 
 
+const demoJson =
+    {
+      "ServiceName": "LEDChange",
+      "ServiceInputs": "(1)"
+    }
+
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
+
+  fs.readdir(pathSaves, (error, files) => {
+    if(error){
+      console.error("Couldn't read directory");
+    }
+    const Saves = files.filter(file => path.extname(file).toLowerCase() === '.txt');
+    Saves.forEach(SingleSave => {
+      console.log("Saved file: " + SingleSave);
+      const filePath = path.join(pathSaves, SingleSave);
+      fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+          console.error('Error reading file:', err);
+          return;
+        }
+        SavedApps.push(JSON.parse(data));
+        //console.log(JSON.parse(data));
+      });
+
+    });
+
+  });
+
+
   MultiConnect();
 
 
 
 
 /*
+  rl.question(`What do you want to do? Make or Read`, option => {
+    let json1 = parser.ServiceCallCreator(Services, EntityLanguages, demoJson);
+    console.log(json1);
+    try{
+      parser.ServiceRequest(json1)
+          .then((serviceResult) => {
+
+          })
+          .catch((error) => {
+            console.error(error);
+
+          });
+    } catch (error) {
+      console.error(error);
+
+    }
+  });
   rl.question(`What do you want to do? Make or Read`, option => {
     if(option === 'Make' || option === 'make'){
       rl.question(`Enter a file name`, name => {
