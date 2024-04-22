@@ -32,6 +32,7 @@ button {
     border: 1px solid black;
     padding: 0.67em;
     position: relative;
+    background-color: white;
 }
 
 input {
@@ -66,7 +67,7 @@ form {
     border: 1px solid #000000; /* Add a border */
     margin: 10px; /* Add margin for spacing */
     width: auto; /* Set the width of the box */
-  }
-  body {
+}
+body {
     background-color: #ade6df;
-  }
+}
