@@ -196,12 +196,20 @@ tab6Previous.onclick = function() {
 
 
 submitbtn_type1.onclick = async function () {
-    const AvailableServices = await fetchData('/Services');
-    let type1A= document.getElementById('Type1-A').value;
-    let type1B= document.getElementById('Type1-B').value;
-    let type1C= document.getElementById('Type1-C').value;
+    let type1A = document.getElementById('Type1-A').value;
+    let type1B = document.getElementById('Type1-B').value;
 
-}
+    // Get the output element
+    let outputElement = document.getElementById('type1-output');
+
+    // Assuming ServicesAvailable is an array of service names
+    if (!ServicesAvailable.includes(type1A) || !ServicesAvailable.includes(type1B)) {
+        outputElement.innerText = "At least one text box isn't an available service.";
+    }
+    else(
+        
+    )
+};
 submitbtn_type2.onclick = async function () {
     let type2A= document.getElementById('Type2-A').value;
     let type2B= document.getElementById('Type2-B').value;
