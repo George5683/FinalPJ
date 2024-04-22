@@ -67,3 +67,6 @@ form {
     margin: 10px; /* Add margin for spacing */
     width: auto; /* Set the width of the box */
   }
+  body {
+    background-color: #ade6df;
+  }
