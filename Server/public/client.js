@@ -240,9 +240,6 @@ submitbtn_type1.onclick = async function () {
 
         responseback.innerHTML = JSON.stringify(editordata);
 
-        if (!response.ok) {
-            console.error('Failed to send the types to the endpoint.');
-        }
     }
 
 };
@@ -270,9 +267,6 @@ submitbtn_type2.onclick = async function () {
 
         responseback.innerHTML = JSON.stringify(editordata);
 
-        if (!response.ok) {
-            console.error('Failed to send the types to the endpoint.');
-        }
     }
 };
 
@@ -302,9 +296,6 @@ submitbtn_type3.onclick = async function () {
 
         responseback.innerHTML = JSON.stringify(editordata);
 
-        if (!response.ok) {
-            console.error('Failed to send the types to the endpoint.');
-        }
     }
 };
 
