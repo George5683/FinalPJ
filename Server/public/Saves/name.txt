@@ -1,5 +1,5 @@
 {
-  "AppName": "TypeApp",
+  "AppName": "name",
   "Instruction": [
     {
       "Type": "Type1",

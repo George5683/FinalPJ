@@ -66,7 +66,7 @@ function Things(Things, newThing){
     if(Array.isArray(Things)){
         for(i = 0; i < Things.length; i++){
             if(Things[i][key] === newThing[key]){
-                console.log("Detected Thing");
+                //console.log("Detected Thing");
                 isnew = false;
             }
         }
@@ -90,7 +90,7 @@ function Relationships(Relationships, newRelationships){
     if(Array.isArray(Relationships)){
         for(i = 0; i < Relationships.length; i++){
             if(Relationships[i][key] === newRelationships[key]){
-                console.log("Detected Thing");
+                //console.log("Detected Thing");
                 isnew = false;
             }
         }
@@ -185,6 +185,7 @@ async function ServiceRequest(requestJson){
 async function AppRunner(AppInstruction, services, EntityLanguages){
     let i = 0;
 
+    let continueApp = false;
 
     if(Array.isArray(AppInstruction)){
         for(i; i < AppInstruction.length;){
@@ -194,17 +195,114 @@ async function AppRunner(AppInstruction, services, EntityLanguages){
                 console.log("-----App Stopping-----")
                 return;
             }
-            const ServiceCall =  ServiceCallCreator(services, EntityLanguages, AppInstruction[i]);
-            await ServiceRequest(ServiceCall)
-                .then((serviceResult) => {
-                    //console.log('Service Result before send:', serviceResult);
-                    i++;
-                })
-                .catch((error) => {
-                    console.error(error);
 
-                });
-            await wait(2000);
+            switch (AppInstruction[i]["Type"]){
+                case "Type1":
+                    const ServiceCallType1 =  ServiceCallCreator(services, EntityLanguages, AppInstruction[i]);
+                    await ServiceRequest(ServiceCallType1)
+                        .then((serviceResult) => {
+                            console.log('Service Result before send:', serviceResult);
+                            i++;
+                        })
+                        .catch((error) => {
+                            AppCancel();
+                            console.error(error);
+                        });
+                    await wait(2000);
+                    break;
+
+                case "Type2":
+                    const ServiceCallType2 =  ServiceCallCreator(services, EntityLanguages, AppInstruction[i]);
+                    await ServiceRequest(ServiceCallType2)
+                        .then((serviceResult) => {
+                            console.log('Service Result before send:', serviceResult);
+                            continueApp = true
+                        })
+                        .catch((error) => {
+                            AppCancel();
+                            console.error(error);
+                        });
+                    while(!continueApp){
+                        if(!AllowRun){
+                            console.log("-----App Stopping-----")
+                            return;
+                        }
+                        await wait(2000);
+                    }
+                    let InstructionType2 = {
+                        "ServiceName": AppInstruction[i]["ServiceName2"],
+                        "ServiceInputs": AppInstruction[i]["ServiceInputs2"]
+                    }
+                    console.log("-----Beginning Linked Service-----")
+                    const ServiceCallPart2 =  ServiceCallCreator(services, EntityLanguages, InstructionType2);
+                    await ServiceRequest(ServiceCallPart2)
+                        .then((serviceResult) => {
+                            console.log('Service Result before send:', serviceResult);
+                            continueApp = true
+                            i++;
+                        })
+                        .catch((error) => {
+                            AppCancel();
+                            console.error(error);
+                        });
+                    await wait(2000);
+                    break;
+                case "Type3":
+                    let ConditionMet;
+                    console.log("-----TYPE #3-----");
+                    const ServiceCallType3 =  ServiceCallCreator(services, EntityLanguages, AppInstruction[i]);
+                    await ServiceRequest(ServiceCallType3)
+                        .then((serviceResult) => {
+                            console.log('Service Result before send:', serviceResult);
+                            console.log(`(${serviceResult.toString()})`);
+                            if(`${serviceResult.toString()}` === AppInstruction[i]["ServiceOutput"]){
+                                console.log("----------Condition Satisfied----------");
+                                continueApp = true;
+                                ConditionMet = true;
+                            }
+                            else{
+                                console.log("----------Condition Not Met----------");
+                                ConditionMet = false;
+                            }
+
+                        })
+                        .catch((error) => {
+                            AppCancel();
+                            console.error(error);
+                        });
+                    while(!continueApp){
+                        if(!AllowRun){
+                            console.log("-----App Stopping-----");
+                            return;
+                        }
+                        if(!ConditionMet){
+                            console.log("-----END PART1-----");
+                            i++;
+                            break;
+                        }
+                        await wait(2000);
+                    }
+                    let InstructionType3 = {
+                        "ServiceName": AppInstruction[i]["ServiceName2"],
+                        "ServiceInputs": AppInstruction[i]["ServiceInputs2"]
+                    }
+                    if(ConditionMet){
+                        console.log("----------Beginning Condition Service----------")
+                        const ServiceCallPart2_3 =  ServiceCallCreator(services, EntityLanguages, InstructionType3);
+                        await ServiceRequest(ServiceCallPart2_3)
+                            .then((serviceResult) => {
+                                console.log('Service Result before send:', serviceResult);
+                                i++;
+                            })
+                            .catch((error) => {
+                                AppCancel();
+                                console.error(error);
+                            });
+                        await wait(2000);
+                    }
+                    break;
+
+            }
         }
     }
 }

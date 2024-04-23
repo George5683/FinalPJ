@@ -1,12 +1,8 @@
 {
-  "AppName": "hello",
-  "messages": [
-    {
-     "TweetType": "tweetType",
-     "ThingID": "thingId",
-     "SpaceID": "spaceId",
-     "ServiceName": "ServiceName",
-     "ServiceInputs": "ServiceInput"
+      "Type": "Type3",
+      "ServiceName": "ReadPotentiometer",
+      "ServiceInputs": "(1)",
+      "ServiceOutput": "d",
+      "ServiceName2": "d",
+      "ServiceInputs2": "d"
     }
-  ]
-}

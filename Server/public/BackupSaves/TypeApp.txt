@@ -13,18 +13,10 @@
     },
     {
       "Type": "Type2",
-      "ServiceName": "ReadPotentiometer",
-      "ServiceInputs": "(1)",
-      "ServiceName2": "jk",
-      "ServiceInputs2": "d"
-    },
-    {
-      "Type": "Type3",
-      "ServiceName": "ReadPotentiometer",
-      "ServiceInputs": "(1)",
-      "ServiceOutput": "d",
-      "ServiceName2": "d",
-      "ServiceInputs2": "d"
+      "ServiceName": "LEDON",
+      "ServiceInputs": "(1)"
+      "ServiceName2": "LEDOFF",
+      "ServiceInputs2": "(1)"
     }
   ]
 }

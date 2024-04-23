@@ -87,7 +87,7 @@ app.put(`/App-Activate`, async (req, res) => {
   try{
     if(AppInstance){
       console.log("-----Already an App running-----");
-      res.status(240)
+      res.send('App stopped').status(240);
     }
     else{
       parser.AppAllow();
@@ -95,12 +95,12 @@ app.put(`/App-Activate`, async (req, res) => {
       await AppInstance;
       AppInstance = null;
       console.log("-----App Complete-----");
-      res.status(200)
+      res.send('App stopped').status(200);
     }
   }
   catch (error){
     console.log("App Failed:"+ error);
-    res.status(250);
+    res.send('App stopped').status(250);
   }
 })
 
@@ -146,30 +146,27 @@ app.put("/App-Delete",async (req, res) => {
 })
 app.put("/App-Save",async (req, res) => {
   console.log("-----App-Save-----");
-  let AppName = req.body;
-  let Saved = false;
+  let newApp = req.body;
+  let Exists = false;
+  console.log(newApp);
+
   if(Array.isArray(SavedApps)){
     for(i = 0; i < SavedApps.length; i++){
-      if(SavedApps[i]["AppName"] === AppName["AppName"]){
-        SavedApps.splice(i,1);
-        //console.log(SavedApps)
-        console.log(pathSaves+`${AppName["AppName"]}.txt`);
-        fs.rm(pathSaves+`${AppName["AppName"]}.txt`,(error) => {
-          if(error){
-            console.error("Couldn't read directory");
-          }
-          deleted = true;
-        });
+      if(SavedApps[i]["AppName"] === newApp["AppName"]){
+        Exists = true;
+        console.log("AppName in use");
       }
     }
+    if(!Exists){
+      SavedApps.push(newApp);
+      console.log("-----Saved New App-----");
+      res.json(JSON.parse("{\"Reply\": \"App Saved\"}")).status(200);
+    }
+    else{
+      res.json("{\"Reply\": \"App could not be Saved\"}").status(200);
+    }
   }
-  if(Saved){
-    loadApps();
-    res.json(JSON.parse("{\"Reply\": \"App Saved\"}")).status(200);
-  }
-  else{
-    res.json("{\"Reply\": \"App could not be Saved\"}").status(200);
-  }
+
 })
 //Get Saved Files
 app.get(`/Get-Apps`, (req, res,) => {
@@ -255,7 +252,9 @@ function MultiConnect(){
 
   server.on('message', function (multicastMessage,remote){
     let ParsedMessage = multicastMessage.toString();
-    console.log('MCast Msg: From: ' + remote.address + ':' + remote.port +' - \n' + multicastMessage);
+
+    //console.log('MCast Msg: From: ' + remote.address + ':' + remote.port +' - \n' + multicastMessage);
+
     ParsedMessage = ParsedMessage.replace('\"Input\"', '\\\"Input\\\"');
     ParsedMessage = ParsedMessage.replace(/\s/g, '');
     ParsedMessage = JSON.parse(ParsedMessage)
@@ -352,7 +351,7 @@ async function loadApps(){
         }
         if(Addit){
           SavedApps.push(newSave);
-          console.log(SavedApps);
+          console.log("Saved file: " + SingleSave);
         }
       });
     });
