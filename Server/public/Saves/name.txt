@@ -1,12 +1,9 @@
 {
   "AppName": "name",
-  "messages": [
+  "Instruction": [
     {
-     "TweetType": "tweetType",
-     "ThingID": "thingId",
-     "SpaceID": "spaceId",
-     "ServiceName": "ServiceName",
-     "ServiceInputs": "ServiceInput"
+      "ServiceName": "ReadPotentiometer",
+      "ServiceInputs": "(1)"
     }
   ]
 }

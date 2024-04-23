@@ -88,7 +88,7 @@ function ServiceCallCreator(Services, Entities, request){
     let serviceCall = 'Service call';
     let thingId = '';
     let spaceId = '';
-    let serviceName = 'LEDChange';
+    let serviceName = '';
     let serviceInputs = "(1)";
     let hostIP = "";
     let targetPort = 0;
@@ -98,6 +98,7 @@ function ServiceCallCreator(Services, Entities, request){
             if(Services[i]["Name"] === request["ServiceName"]){
                 thingId = Services[i]["ThingID"];
                 spaceId = Services[i]["SpaceID"]
+                serviceName = request["ServiceName"]
                 console.log("Found Service. Here is ThingID: " + thingId);
             }
         }
@@ -115,7 +116,7 @@ function ServiceCallCreator(Services, Entities, request){
         "Tweet Type": serviceCall,
         "Thing ID": thingId,
         "Space ID": spaceId,
-        "Service Name": request["ServiceName"],
+        "Service Name": serviceName,
         "Service Inputs": request["ServiceInputs"],
         "TargetIP": hostIP,
         "TargetPort": 6668
