@@ -4,8 +4,8 @@ const http = require("http");
 const {response} = require("express");
 const net = require("net");
 
-module.exports = {Services, Things, EntityLanguage, ServiceRequest, ServiceCallCreator, AppFinder};
-
+module.exports = {Services, Things, EntityLanguage, ServiceRequest, ServiceCallCreator, AppFinder, AppRunner, AppCancel, AppAllow};
+let AllowRun = true;
 
 function Services(Services, newService){
     delete newService["TweetType"];
@@ -41,7 +41,7 @@ function EntityLanguage(EntityLanguage, newEntityLanguage, address, port){
     if(Array.isArray(EntityLanguage)){
         for(i = 0; i < EntityLanguage.length; i++){
             if(EntityLanguage[i][key] === newEntityLanguage[key]){
-                console.log("Detected Thing");
+                //console.log("Detected Thing");
                 isnew = false;
             }
         }
@@ -82,14 +82,7 @@ function Things(Things, newThing){
     }
 }
 
-const demoJson =
-    {
-        "Tweet Type": "Service call",
-        "Thing ID": "led",
-        "Space ID": "Lab4",
-        "Service Name": "change",
-        "Service Inputs": "(1)"
-    }
+
 function ServiceCallCreator(Services, Entities, request){
 
     let serviceCall = 'Service call';
@@ -129,14 +122,14 @@ function ServiceCallCreator(Services, Entities, request){
     }
 }
 
-function ServiceRequest(requestJson){
+async function ServiceRequest(requestJson){
     const{ TweetType, ThingID, SpaceID, ServiceName, ServiceInputs, TargetIP, TargetPort} = requestJson;
     let response = '';
 
     const message = requestJson;
 
     return new Promise((resolve, reject) => {
-        console.log("sending Message");
+        console.log("-----Sending Service Message-----");
         const client = new net.Socket();
         console.log(JSON.stringify(requestJson), TargetPort);
         client.connect({ host: TargetIP, port: TargetPort }, () => {
@@ -156,7 +149,7 @@ function ServiceRequest(requestJson){
                 jsonObject = JSON.parse(response);
                 const serviceResult = jsonObject["Service Result"];
                 console.log("Service Result: ", serviceResult);
-                console.log('Response received:', response);
+                //console.log('Response received:', response);
                 resolve(serviceResult);
             } catch (error) {
                 reject(error);
@@ -165,8 +158,38 @@ function ServiceRequest(requestJson){
     });
 }
 
+async function AppRunner(AppInstruction, services, EntityLanguages){
+    let i = 0;
+
+
+    if(Array.isArray(AppInstruction)){
+        for(i; i < AppInstruction.length;){
+            //console.log(AppInstruction.length);
+            //console.log(i);
+            if(!AllowRun){
+                console.log("-----App Stopping-----")
+                return;
+            }
+            const ServiceCall =  ServiceCallCreator(services, EntityLanguages, AppInstruction[i]);
+            await ServiceRequest(ServiceCall)
+                .then((serviceResult) => {
+                    //console.log('Service Result before send:', serviceResult);
+                    i++;
+                })
+                .catch((error) => {
+                    console.error(error);
+
+                });
+            await wait(2000);
+        }
+    }
+}
+
+
+
 function AppFinder(AppName, SavedApps){
     //find right app
+    console.log(SavedApps);
     let AppJson;
     if(Array.isArray(SavedApps)){
         for(i = 0; i < SavedApps.length; i++){
@@ -175,5 +198,22 @@ function AppFinder(AppName, SavedApps){
             }
         }
     }
-    return[AppJson["Instruction"]];
+    return AppJson
+}
+
+async function AppCancel(){
+    AllowRun = false;
+    await wait(5000);
+}
+
+function AppAllow(){
+    AllowRun = true;
+}
+
+setTimeout(() => {
+    // Code to be executed after the wait time
+    console.log('Waited for 1 second');
+}, 1000);
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
