@@ -211,6 +211,8 @@ submitbtn_type1.onclick = async function () {
     // Get the output element
     let outputElement = document.getElementById('type1-output');
 
+    console.log("Service Available:",ServicesAvailable);
+
 
     // Assuming ServicesAvailable is an array of service names
     if (!ServicesAvailable.includes(type1A) || !ServicesAvailable.includes(type1B)) {
