@@ -550,7 +550,7 @@ getRelationships.onclick = async function () {
 
                 // Set the innerHTML of the responseback element to the response data
                 // Assuming the response data is a string
-                responseback.innerHTML = stringify(data);
+                responseback.innerHTML = JSON.stringify(data);
             })
             .catch((error) => {
                 console.error('Error:', error);
