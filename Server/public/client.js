@@ -439,7 +439,7 @@ getRelationships.onclick = async function () {
 
   getApps.onclick = async function () {
     const serviceBox = document.getElementById('app-results');
-    const currentServices = await fetchData('/Saves');
+    const currentServices = await fetchData('/Get-Apps');
     console.log(JSON.stringify(currentServices));
 
     serviceBox.innerHTML = ""; // Clear previous content
