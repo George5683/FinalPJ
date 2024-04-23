@@ -538,7 +538,7 @@ getRelationships.onclick = async function () {
         
             // Send the JSON data to the endpoint
             fetch('/App-Editor', {
-                method: 'PUT',
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
