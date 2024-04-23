@@ -1,9 +1,12 @@
 
 // Below are variables
+let editordata;
+
 let ServicesAvailable= [];
 let logbox = document.getElementById('Log');
 let responseback = document.getElementById('Response-Back');
 let newapps = document.getElementById('new-apps');
+let submiteditor = document.getElementById('submit-editor');
 
 let tab1Next = document.getElementById('tab1-next');
 let tab2Next = document.getElementById('tab2-next');
@@ -208,26 +211,35 @@ submitbtn_type1.onclick = async function () {
     // Get the output element
     let outputElement = document.getElementById('type1-output');
 
+
     // Assuming ServicesAvailable is an array of service names
     if (!ServicesAvailable.includes(type1A) || !ServicesAvailable.includes(type1B)) {
         outputElement.innerText = "At least one text box isn't an available service.";
     } else {
-        // Send the types to an endpoint
-        let response = await fetch('/Type1', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                type1A: type1A,
-                type1B: type1B
-            })
-        });
+
+        let NewInstruction = {
+            "Type": "Type1",
+            "ServiceName": type1A,
+            "ServiceInputs": "(1)"
+        };
+
+        editordata.Instruction.push(NewInstruction);
+
+        let NewInstruction2 = {
+            "Type": "Type1",
+            "ServiceName": type1B,
+            "ServiceInputs": "(1)"
+        };
+
+        editordata.Instruction.push(NewInstruction);
+
+        responseback.innerHTML = JSON.stringify(editordata);
 
         if (!response.ok) {
             console.error('Failed to send the types to the endpoint.');
         }
     }
+
 };
 
 submitbtn_type2.onclick = async function () {
@@ -241,17 +253,17 @@ submitbtn_type2.onclick = async function () {
     if (!ServicesAvailable.includes(type2A) || !ServicesAvailable.includes(type2B)) {
         outputElement.innerText = "At least one text box isn't an available service.";
     } else {
-        // Send the types to an endpoint
-        let response = await fetch('/Type2', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                type2A: type2A,
-                type2B: type2B
-            })
-        });
+        let NewInstruction = {
+            "Type": "Type2",
+            "ServiceName": type2A,
+            "ServiceInputs": "(1)",
+            "ServiceName2" : type2B,
+            "ServiceInputs2": "(1)"
+        };
+
+        editordata.Instruction.push(NewInstruction);
+
+        responseback.innerHTML = JSON.stringify(editordata);
 
         if (!response.ok) {
             console.error('Failed to send the types to the endpoint.');
@@ -271,18 +283,19 @@ submitbtn_type3.onclick = async function () {
     if (!ServicesAvailable.includes(type3A) || !ServicesAvailable.includes(type3B)) {
         outputElement.innerText = "At least one text box isn't an available service.";
     } else {
-        // Send the types to an endpoint
-        let response = await fetch('/Type3', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                type3A: type3A,
-                type3B: type3B,
-                condition: condition
-            })
-        });
+        
+        let NewInstruction = {
+            "Type": "Type3",
+            "ServiceName": type3A,
+            "ServiceInputs": "(1)",
+            "ServiceOutput": `(${condition})`,
+            "ServiceName2" : type3B,
+            "ServiceInputs2": "(1)"
+        };
+
+        editordata.Instruction.push(NewInstruction);
+
+        responseback.innerHTML = JSON.stringify(editordata);
 
         if (!response.ok) {
             console.error('Failed to send the types to the endpoint.');
@@ -290,11 +303,37 @@ submitbtn_type3.onclick = async function () {
     }
 };
 
+submiteditor.onclick = async function () {
+    // Send the JSON data to the endpoint
+    fetch('/App-Save', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editordata),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
 newapps.onclick = async function () {
     newappname = document.getElementById('new-app-name').value;
 
     let appname= document.getElementById('App-Name');
     appname.innerHTML = newappname;
+
+    editordata = {
+        "AppName": newappname,
+        "Instruction": []
+    };
+
+    responseback.innerHTML = JSON.stringify(editordata);
+
 
 
     tab4.style.display = 'block';
@@ -572,7 +611,10 @@ getRelationships.onclick = async function () {
 
                 // Set the innerHTML of the responseback element to the response data
                 // Assuming the response data is a string
-                responseback.innerHTML = JSON.stringify(data);
+                
+                editordata = data;
+                console.log(editordata);
+                responseback.innerHTML = JSON.stringify(editordata);
             })
             .catch((error) => {
                 console.error('Error:', error);
