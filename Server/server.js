@@ -6,6 +6,7 @@ const dgram = require('dgram');
 const fs = require('fs');
 const readline = require('node:readline')
 const parser = require('./parsers')
+const {AppCancel} = require("./parsers");
 
 
 const app = express();
@@ -48,7 +49,7 @@ const SavedApps = [];
 const AppName = '';
 // Only for Functions
 
-
+let AppInstance = null;
 
 
 
@@ -74,20 +75,105 @@ app.put("/doservice", (req, res) =>{
   }
 })
 
-app.put(`/StartApp`, (req, res) => {
-
-  console.log("StartApp");
+app.put(`/App-Activate`, async (req, res) => {
+  console.log("-----Starting App-----");
   let AppName = req.body;
-  console.log("recieved: ");
-  console.log(AppName);
+ // console.log("recieved: ");
+  //console.log(AppName);
 
+  let RunApp = await parser.AppFinder(AppName, SavedApps);
+  let AppInstruction = RunApp["Instruction"];
 
-  let RunApp = parser.AppFinder(AppName, SavedApps);
-
-  console.log(RunApp);
-  res.status(200);
+  try{
+    if(AppInstance){
+      console.log("-----Already an App running-----");
+      res.status(240)
+    }
+    else{
+      parser.AppAllow();
+      AppInstance = parser.AppRunner(AppInstruction, Services, EntityLanguages);
+      await AppInstance;
+      AppInstance = null;
+      console.log("-----App Complete-----");
+      res.status(200)
+    }
+  }
+  catch (error){
+    console.log("App Failed:"+ error);
+    res.status(250);
+  }
 })
 
+app.put("/App-Stop",async (req, res) => {
+  if (AppInstance) {
+    console.log('-----Stopping running App-----');
+    await parser.AppCancel();
+    AppInstance = null;
+    parser.AppAllow();
+    console.log('-----App Stopped-----');
+    res.send('App stopped').status(200);
+  } else {
+    res.send('No App is Running').status(230);
+  }
+})
+
+app.put("/App-Delete",async (req, res) => {
+  let AppName = req.body;
+  let deleted = false;
+  if(Array.isArray(SavedApps)){
+    for(i = 0; i < SavedApps.length; i++){
+      if(SavedApps[i]["AppName"] === AppName["AppName"]){
+        SavedApps.splice(i,1);
+        console.log(SavedApps)
+        console.log(pathSaves+`${AppName["AppName"]}.txt`);
+        fs.rm(pathSaves+`${AppName["AppName"]}.txt`,(error) => {
+          if(error){
+            console.error("Couldn't read directory");
+          }
+        deleted = true;
+        });
+      }
+    }
+  }
+  if(deleted){
+    loadApps();
+    res.json(JSON.parse("{\"Reply\": \"Deleted App\"}")).status(200);
+  }
+  else{
+    res.json("{\"Reply\": \"App could not be found\"}").status(200);
+  }
+})
+app.put("/App-Save",async (req, res) => {
+  let AppName = req.body;
+  let Saved = false;
+  if(Array.isArray(SavedApps)){
+    for(i = 0; i < SavedApps.length; i++){
+      if(SavedApps[i]["AppName"] === AppName["AppName"]){
+        SavedApps.splice(i,1);
+        console.log(SavedApps)
+        console.log(pathSaves+`${AppName["AppName"]}.txt`);
+        fs.rm(pathSaves+`${AppName["AppName"]}.txt`,(error) => {
+          if(error){
+            console.error("Couldn't read directory");
+          }
+          deleted = true;
+        });
+      }
+    }
+  }
+  if(Saved){
+    loadApps();
+    res.json(JSON.parse("{\"Reply\": \"App Saved\"}")).status(200);
+  }
+  else{
+    res.json("{\"Reply\": \"App could not be Saved\"}").status(200);
+  }
+})
+//Get Saved Files
+app.get(`/Saves`, (req, res,) => {
+
+  res.json((SavedApps));
+})
 app.get("/Services",(req, res) =>{
   //get json value, then push it to service array
   console.log("GET /Services");
@@ -107,22 +193,24 @@ app.get("/Relationships",(req, res) =>{
   console.log(EntityLanguages);
 
   res.json((Relationships));
-
 })
 
-//Get Saved Files
-app.get(`/Saves`, (req, res,) => {
-  console.log("here is new" + JSON.stringify(SavedApps));
-  res.json((SavedApps));
+app.get("/App-Editor",(req, res) =>{
+  let AppName = req.body;
+  let ReturnApp;
+  if(Array.isArray(SavedApps)){
+    for(i = 0; i < SavedApps.length; i++){
+      if(SavedApps[i]["AppName"] === AppName["AppName"]){
+        ReturnApp = SavedApps[i];
+        res.json(ReturnApp).status(200);
+      }
+    }
+  }
+  res.json(JSON.parse("{\"Reply\": \"Couldnt't get app\"}")).status(250);
 })
+
 
 //Create Saved Files
-app.put(`/Saves`,(req, res,) => {
-  SaveList = "Files to Save";
-
-
-  res.status(100);
-})
 
 // Handle any unmatched routes and serve index.html
 app.get('*', (req, res) => {
@@ -229,11 +317,8 @@ const demoJson =
       "ServiceName": "LEDChange",
       "ServiceInputs": "(1)"
     }
-
-
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-
+function loadApps(){
+  SavedApps.length = 0;
   fs.readdir(pathSaves, (error, files) => {
     if(error){
       console.error("Couldn't read directory");
@@ -248,14 +333,15 @@ app.listen(port, () => {
           return;
         }
         SavedApps.push(JSON.parse(data));
-        //console.log(JSON.parse(data));
       });
-
     });
-
   });
+}
 
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 
+  loadApps();
   MultiConnect();
 
 

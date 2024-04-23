@@ -1,0 +1,12 @@
+{
+  "AppName": "name",
+  "messages": [
+    {
+     "TweetType": "tweetType",
+     "ThingID": "thingId",
+     "SpaceID": "spaceId",
+     "ServiceName": "ServiceName",
+     "ServiceInputs": "ServiceInput"
+    }
+  ]
+}
