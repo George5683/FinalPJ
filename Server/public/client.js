@@ -400,7 +400,7 @@ getServices.onclick = async function () {
       // Append the service element to the serviceBox
       serviceBox.appendChild(serviceElement);
 
-      AvailableServices = serviceNames;
+      ServicesAvailable = serviceNames;
     });
   };
 
