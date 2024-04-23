@@ -218,7 +218,7 @@ submitbtn_type1.onclick = async function () {
     if (!ServicesAvailable.includes(type1A) || !ServicesAvailable.includes(type1B)) {
         outputElement.innerText = "At least one text box isn't an available service.";
     } else {
-        //outputElement.innerText = "";
+        outputElement.innerText = "";
 
         let NewInstruction = {
             "Type": "Type1",
@@ -255,6 +255,7 @@ submitbtn_type2.onclick = async function () {
     if (!ServicesAvailable.includes(type2A) || !ServicesAvailable.includes(type2B)) {
         outputElement.innerText = "At least one text box isn't an available service.";
     } else {
+        outputElement.innerText = "";
         let NewInstruction = {
             "Type": "Type2",
             "ServiceName": type2A,
@@ -283,6 +284,8 @@ submitbtn_type3.onclick = async function () {
         outputElement.innerText = "At least one text box isn't an available service.";
     } else {
         
+        outputElement.innerText = "";
+
         let NewInstruction = {
             "Type": "Type3",
             "ServiceName": type3A,
