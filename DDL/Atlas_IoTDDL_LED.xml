@@ -289,14 +289,17 @@ else{
 // ~ Service body C/C++ code block ~
 // You can use the inputs you defined above by name
 // Any return values should match the specified output type
-
-
-DigitalWrite_High(27);
-Output = 1;
+if(Input == 1){
+    DigitalWrite_High(27);
+	Output = 1;
+}
+else{
+    Output = 0;
+}
 ]]></Service_Formula>
-					<Service_NumberInputs>0</Service_NumberInputs>
-					<Service_InputTypes></Service_InputTypes>
-					<Service_InputDescriptions></Service_InputDescriptions>
+					<Service_NumberInputs>1</Service_NumberInputs>
+					<Service_InputTypes>int</Service_InputTypes>
+					<Service_InputDescriptions>Input</Service_InputDescriptions>
 				</Service_5>
 				<Number_Services>5</Number_Services>
 			</Services>
