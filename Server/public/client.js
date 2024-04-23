@@ -1,6 +1,6 @@
 
 // Below are variables
-let editordata;
+let editordata = {};
 
 let ServicesAvailable= [];
 let logbox = document.getElementById('Log');
@@ -216,7 +216,7 @@ submitbtn_type1.onclick = async function () {
     if (!ServicesAvailable.includes(type1A) || !ServicesAvailable.includes(type1B)) {
         outputElement.innerText = "At least one text box isn't an available service.";
     } else {
-        outputElement.innerText = "";
+        //outputElement.innerText = "";
 
         let NewInstruction = {
             "Type": "Type1",
