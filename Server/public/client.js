@@ -290,7 +290,7 @@ submitbtn_type3.onclick = async function () {
             "Type": "Type3",
             "ServiceName": type3A,
             "ServiceInputs": "(1)",
-            "ServiceOutput": `(${condition})`,
+            "ServiceOutput": condition,
             "ServiceName2" : type3B,
             "ServiceInputs2": "(1)"
         };
