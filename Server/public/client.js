@@ -3,6 +3,7 @@
 let ServicesAvailable= [];
 let logbox = document.getElementById('Log');
 let responseback = document.getElementById('Response-Back');
+let newapps = document.getElementById('new-apps');
 
 let tab1Next = document.getElementById('tab1-next');
 let tab2Next = document.getElementById('tab2-next');
@@ -288,6 +289,27 @@ submitbtn_type3.onclick = async function () {
         }
     }
 };
+
+newapps.onclick = async function () {
+    newappname = document.getElementById('new-app-name').value;
+
+    let appname= document.getElementById('App-Name');
+    appname.innerHTML = newappname;
+
+
+    tab4.style.display = 'block';
+    tab1.style.display = 'none';
+    tab2.style.display = 'none';
+    tab3.style.display = 'none';
+    tab5.style.display = 'none';
+    tab6.style.display = 'none';
+    tab4Header.classList = 'active';
+    tab1Header.classList.remove('active');
+    tab2Header.classList.remove('active');
+    tab3Header.classList.remove('active');
+    tab5Header.classList.remove('active');
+    tab6Header.classList.remove('active');
+}
 
 getServices.onclick = async function () {
     const currentService = await fetchData('/Services');
