@@ -255,7 +255,7 @@ if(Input == 1){
     
 }
 else{
-    Output = 0
+    Output = 0;
 }
 ]]></Service_Formula>
 					<Service_NumberInputs>1</Service_NumberInputs>

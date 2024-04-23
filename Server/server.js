@@ -105,8 +105,8 @@ app.put(`/App-Activate`, async (req, res) => {
 })
 
 app.put("/App-Stop",async (req, res) => {
+  console.log("-----App Stop-----");
   if (AppInstance) {
-    console.log('-----Stopping running App-----');
     await parser.AppCancel();
     AppInstance = null;
     parser.AppAllow();
@@ -118,6 +118,7 @@ app.put("/App-Stop",async (req, res) => {
 })
 
 app.put("/App-Delete",async (req, res) => {
+  console.log("-----App Delete-----");
   let AppName = req.body;
   let deleted = false;
   if(Array.isArray(SavedApps)){
@@ -144,6 +145,7 @@ app.put("/App-Delete",async (req, res) => {
   }
 })
 app.put("/App-Save",async (req, res) => {
+  console.log("-----App-Save-----");
   let AppName = req.body;
   let Saved = false;
   if(Array.isArray(SavedApps)){
@@ -171,42 +173,45 @@ app.put("/App-Save",async (req, res) => {
 })
 //Get Saved Files
 app.get(`/Saves`, (req, res,) => {
-
+  console.log("-----Get Saves-----");
   res.json((SavedApps));
 })
 app.get("/Services",(req, res) =>{
   //get json value, then push it to service array
-  console.log("GET /Services");
-  console.log(Services);
+  console.log("-----GET Services-----");
+  //console.log(Services);
   res.json((Services));
 })
 
 app.get("/Things",(req, res) =>{
   //get json value, then push it to service array
-  console.log("GET /Things");
-  console.log(Things);
+  console.log("-----GET Things-----");
+  //console.log(Things);
   res.json((Things));
 })
 app.get("/Relationships",(req, res) =>{
   //get json value, then push it to service array
-  console.log("GET /Relationships");
-  console.log(EntityLanguages);
-
+  console.log("-----Get Relationships-----");
   res.json((Relationships));
 })
 
-app.get("/App-Editor",(req, res) =>{
+app.put("/App-Editor",(req, res) =>{
+  console.log("-----App-Editor-----");
   let AppName = req.body;
   let ReturnApp;
+  let Success = false;
   if(Array.isArray(SavedApps)){
     for(i = 0; i < SavedApps.length; i++){
       if(SavedApps[i]["AppName"] === AppName["AppName"]){
         ReturnApp = SavedApps[i];
+        Success = true;
         res.json(ReturnApp).status(200);
       }
     }
   }
-  res.json(JSON.parse("{\"Reply\": \"Couldnt't get app\"}")).status(250);
+  if(!Success){
+    res.json(JSON.parse("{\"Reply\": \"Couldnt't get app\"}")).status(250);
+  }
 })
 
 
