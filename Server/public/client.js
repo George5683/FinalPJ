@@ -231,7 +231,7 @@ submitbtn_type1.onclick = async function () {
             "ServiceInputs": "(1)"
         };
 
-        editordata.Instruction.push(NewInstruction);
+        editordata.Instruction.push(NewInstruction2);
 
         responseback.innerHTML = JSON.stringify(editordata);
 
