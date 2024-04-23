@@ -216,6 +216,7 @@ submitbtn_type1.onclick = async function () {
     if (!ServicesAvailable.includes(type1A) || !ServicesAvailable.includes(type1B)) {
         outputElement.innerText = "At least one text box isn't an available service.";
     } else {
+        outputElement.innerText = "";
 
         let NewInstruction = {
             "Type": "Type1",
@@ -232,6 +233,8 @@ submitbtn_type1.onclick = async function () {
         };
 
         editordata.Instruction.push(NewInstruction2);
+
+        console.log(editordata);
 
         responseback.innerHTML = JSON.stringify(editordata);
 
