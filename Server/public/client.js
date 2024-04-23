@@ -2,6 +2,7 @@
 // Below are variables
 let ServicesAvailable= [];
 let logbox = document.getElementById('Log');
+let responseback = document.getElementById('Response-Back');
 
 let tab1Next = document.getElementById('tab1-next');
 let tab2Next = document.getElementById('tab2-next');
@@ -546,6 +547,10 @@ getRelationships.onclick = async function () {
             .then(response => response.json())
             .then(data => {
                 console.log('Success:', data);
+
+                // Set the innerHTML of the responseback element to the response data
+                // Assuming the response data is a string
+                responseback.innerHTML = data;
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -564,6 +569,9 @@ getRelationships.onclick = async function () {
             tab5Header.classList.remove('active');
             tab6Header.classList.remove('active');
             // Add your code here
+            
+            let appname= document.getElementById('App-Name');
+            appname.innerHTML = app.AppName;
         };
     });
 }
