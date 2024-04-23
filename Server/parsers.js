@@ -4,7 +4,7 @@ const http = require("http");
 const {response} = require("express");
 const net = require("net");
 
-module.exports = {Services, Things, EntityLanguage, ServiceRequest, ServiceCallCreator, AppFinder, AppRunner, AppCancel, AppAllow};
+module.exports = {Services, Relationships, Things, EntityLanguage, ServiceRequest, ServiceCallCreator, AppFinder, AppRunner, AppCancel, AppAllow};
 let AllowRun = true;
 
 function Services(Services, newService){
@@ -81,7 +81,30 @@ function Things(Things, newThing){
         return newThing
     }
 }
-
+function Relationships(Relationships, newRelationships){
+    delete newRelationships["TweetType"];
+    let isnew = true;
+    let key = "Name";
+    //console.log("Checking");
+    //console.log(JSON.stringify(Things[0]) + " and " + newThing["ThingID"]);
+    if(Array.isArray(Relationships)){
+        for(i = 0; i < Relationships.length; i++){
+            if(Relationships[i][key] === newRelationships[key]){
+                console.log("Detected Thing");
+                isnew = false;
+            }
+        }
+        if (isnew){
+            return newRelationships
+        }
+        else {
+            return null
+        }
+    }
+    else{
+        return newRelationships
+    }
+}
 
 function ServiceCallCreator(Services, Entities, request){
 
