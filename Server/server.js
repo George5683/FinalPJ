@@ -152,7 +152,7 @@ app.put("/App-Save",async (req, res) => {
     for(i = 0; i < SavedApps.length; i++){
       if(SavedApps[i]["AppName"] === AppName["AppName"]){
         SavedApps.splice(i,1);
-        console.log(SavedApps)
+        //console.log(SavedApps)
         console.log(pathSaves+`${AppName["AppName"]}.txt`);
         fs.rm(pathSaves+`${AppName["AppName"]}.txt`,(error) => {
           if(error){
@@ -172,9 +172,10 @@ app.put("/App-Save",async (req, res) => {
   }
 })
 //Get Saved Files
-app.get(`/Saves`, (req, res,) => {
+app.get(`/Get-Apps`, (req, res,) => {
   console.log("-----Get Saves-----");
-  res.json((SavedApps));
+  loadApps();
+  res.json(SavedApps);
 })
 app.get("/Services",(req, res) =>{
   //get json value, then push it to service array
@@ -276,7 +277,13 @@ function MultiConnect(){
 
       case "Relationship":
         //need relationships to continue
-        console.log("Relationship");
+        let newRelationship = parser.Relationships(Relationships, ParsedMessage);
+        if(newRelationship === null){
+          break;
+        }
+        else{
+          Relationships.push(newRelationship);
+        }
         break;
 
       case "Identity_Thing":
@@ -322,26 +329,36 @@ const demoJson =
       "ServiceName": "LEDChange",
       "ServiceInputs": "(1)"
     }
-function loadApps(){
-  SavedApps.length = 0;
+async function loadApps(){
   fs.readdir(pathSaves, (error, files) => {
     if(error){
       console.error("Couldn't read directory");
     }
     const Saves = files.filter(file => path.extname(file).toLowerCase() === '.txt');
     Saves.forEach(SingleSave => {
-      console.log("Saved file: " + SingleSave);
+      //console.log("Saved file: " + SingleSave);
       const filePath = path.join(pathSaves, SingleSave);
       fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
           console.error('Error reading file:', err);
-          return;
+
         }
-        SavedApps.push(JSON.parse(data));
+        let newSave = JSON.parse((data))
+        let Addit = true;
+        for(i = 0; i < SavedApps.length; i++){
+          if(SavedApps[i]["AppName"] === newSave["AppName"]){
+            Addit = false
+          }
+        }
+        if(Addit){
+          SavedApps.push(newSave);
+          console.log(SavedApps);
+        }
       });
     });
   });
 }
+
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

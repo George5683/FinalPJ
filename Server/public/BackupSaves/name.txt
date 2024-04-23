@@ -1,12 +1,15 @@
 {
-  "AppName": "name",
-  "messages": [
+  "AppName": "TypeApp",
+  "Instruction": [
     {
-     "TweetType": "tweetType",
-     "ThingID": "thingId",
-     "SpaceID": "spaceId",
-     "ServiceName": "ServiceName",
-     "ServiceInputs": "ServiceInput"
+      "Type": "Type1",
+      "ServiceName": "LEDON",
+      "ServiceInputs": "(1)"
+    },
+    {
+      "Type": "Type1",
+      "ServiceName": "LEDStatus",
+      "ServiceInputs": "(1)"
     }
   ]
 }

@@ -1,0 +1,30 @@
+{
+  "AppName": "ServiceTester",
+  "Instruction": [
+    {
+      "Type": "Type1",
+      "ServiceName": "LEDON",
+      "ServiceInputs": "(1)"
+    },
+    {
+      "Type": "Type1",
+      "ServiceName": "LEDStatus",
+      "ServiceInputs": "(1)"
+    },
+    {
+      "Type": "Type1",
+      "ServiceName": "LEDOFF",
+      "ServiceInputs": "(1)"
+    },
+    {
+      "Type": "Type1",
+      "ServiceName": "LEDChange",
+      "ServiceInputs": "(1)"
+    },
+    {
+      "Type": "Type1",
+      "ServiceName": "LEDGREEN",
+      "ServiceInputs": "(1)"
+    }
+  ]
+}

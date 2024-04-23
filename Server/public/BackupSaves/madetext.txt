@@ -8,6 +8,13 @@
     {
       "ServiceName": "LEDChange",
       "ServiceInputs": "(1)"
+    },
+    {
+      "Type": "Type2",
+      "ServiceName": "ReadPotentiometer",
+      "ServiceInputs": "(1)",
+      "ServiceName2": "jk",
+      "ServiceInputs2": "d"
     }
   ]
 }

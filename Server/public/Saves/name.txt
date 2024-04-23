@@ -1,8 +1,14 @@
 {
-  "AppName": "name",
+  "AppName": "TypeApp",
   "Instruction": [
     {
-      "ServiceName": "ReadPotentiometer",
+      "Type": "Type1",
+      "ServiceName": "LEDON",
+      "ServiceInputs": "(1)"
+    },
+    {
+      "Type": "Type1",
+      "ServiceName": "LEDStatus",
       "ServiceInputs": "(1)"
     }
   ]
